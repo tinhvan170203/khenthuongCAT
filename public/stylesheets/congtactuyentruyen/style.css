@@ -1,0 +1,707 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0;
+}
+
+#nav__header {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    background: rgb(0 116 148);
+    justify-content: space-between;
+    border-bottom: 1px solid white;
+}
+
+.nav__header-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav__header-left-icon {
+    color: white;
+    font-size: 24px;
+}
+
+#logo-img {
+    width: 50px;
+    margin-left: 12px;
+}
+
+.offcanvas-start {
+    width: 350px;
+}
+
+.offcanvas-header {
+    border-bottom: 1px solid #777;
+    padding: 12px 12px;
+}
+
+.offcanvas-body {
+    overflow-y: hidden;
+    padding: 0;
+}
+
+#main-menu {
+    margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+#main-menu>a {
+    text-decoration: none;
+}
+
+#main-menu .main-menu-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    transition: all 0.2s;
+    position: relative;
+    height: 89px;
+    font-weight: 550;
+}
+
+.main-menu-item>.main-menu-item-sym {
+    font-size: 30px;
+}
+
+.main-menu-item-title {
+    padding-left: 13px;
+}
+
+.main-menu-item:hover {
+    background: rgb(232, 232, 232);
+    color: rgb(14, 14, 14);
+}
+
+.nav__header-right {
+    display: flex;
+    align-items: baseline;
+}
+
+.admin-name {
+    font-size: 14px;
+    color: white;
+    margin-right: 20px;
+}
+
+.admin {
+    font-size: 18px;
+    color: white;
+    margin-right: 5px;
+}
+
+.change-pass {
+    position: relative;
+}
+
+#change-pass {
+    font-size: 18px;
+    color: white;
+}
+
+.change-pass-title {
+    position: absolute;
+    bottom: -70px;
+    background: #333;
+    color: white;
+    transform: translate(-100%, 0);
+    width: 120px;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.3s;
+    visibility: hidden;
+}
+
+.change-pass:hover {
+    cursor: pointer;
+}
+
+.change-pass:hover .change-pass-title {
+    bottom: -50px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.offcanvas-header {
+    background: rgb(0, 94, 152);
+    height: 56px;
+}
+
+.addVB {
+    color: white;
+    margin-right: 20px;
+    transition: all 0.3s;
+}
+
+.addVB::after {
+    content: '';
+    display: block;
+    clear: both;
+    transition: all 0.5s;
+    width: 0;
+    opacity: 0;
+    height: 3px;
+    background: blanchedalmond;
+}
+
+.addVB:hover {
+    color: chocolate;
+    cursor: pointer;
+}
+
+.addVB:hover:after {
+    width: 100%;
+    opacity: 1;
+    background: chocolate;
+}
+
+#tieudetrang {
+    margin-top: 20px;
+    position: relative;
+    animation: tieudetrang duration timing-function 0s none direction fill-mode;
+}
+
+#tieudetrang::after {
+    top: calc(100% + 5px);
+    position: absolute;
+    content: '';
+    display: block;
+    width: 24%;
+    height: 2px;
+    background: chocolate;
+    margin: 0 38%;
+}
+
+.tieudetrang {
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+}
+
+#chuyenmuc {
+    position: relative;
+}
+
+#chuyenmuc-main,
+#tinbai-main {
+    position: relative;
+    width: 100%;
+    height: 490px;
+    background-size: cover;
+    background-image: url('https://khamphamoingay.com/wp-content/uploads/2019/06/nhung-hinh-anh-thien-nhien-dep-nhat-viet-nam-2.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: scroll;
+    margin-top: 20px;
+}
+
+#tinbai-main {
+    background-image: url('https://1.bp.blogspot.com/-Tv9oIg5jJzs/Vy8WAYBq_5I/AAAAAAAADuA/6eOv3tYn0eAYqXJSgKay8ypXXNmDREx6QCK4B/s1600/tropical-beach-wallpaper-3.jpg');
+}
+
+.edit-demuc:hover {
+    color: rgb(16, 96, 167);
+    cursor: pointer;
+}
+
+.delete-demuc:hover {
+    cursor: pointer;
+    color: rgb(16, 96, 167);
+}
+
+.year-choose {
+    font-size: 14px;
+    font-weight: 550;
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#action-filter {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+}
+
+.action-filter-head {
+    display: flex;
+    align-items: center;
+}
+
+.action-filter-head svg {
+    margin-right: 4px;
+    width: 14px;
+}
+
+.year-choose::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    width: 80%;
+    height: 2px;
+    background: #c6c6c5;
+    transform: translateX(-50%);
+}
+
+select#year {
+    font-size: 12px;
+    outline: none;
+}
+
+.action-filter-item {
+    font-size: 12px;
+    margin: 0 6px;
+    position: relative;
+}
+
+.action-filter-item:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.action-filter-item::before {
+    position: absolute;
+    content: '';
+    display: block;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #e09200;
+    transition: all 0.3s;
+}
+
+.action-filter-item:hover::before {
+    width: 100%;
+    opacity: 1;
+}
+
+.action-filter-item::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 12px;
+    width: 2px;
+    background: rgb(231, 6, 6);
+    top: 9%;
+    right: -8px;
+    transform: rotate3d(1, 1, 1, 45deg);
+}
+
+.active {
+    color: red
+}
+
+.action-filter-body {
+    margin-top: 10px;
+}
+
+#chuyenmuc-wrapper,
+#tinbai-wrapper {
+    position: relative;
+    background: rgb(223, 223, 223, 0.9);
+    margin: 0 auto;
+    top: 20px;
+    border: 2px solid #fff;
+    display: none;
+}
+
+#tinbai-wrapper {
+    height: 460px;
+    display: block;
+    overflow-x: hidden;
+}
+
+#tinbai-wrapper::-webkit-scrollbar {
+    width: 10px;
+}
+
+#tinbai-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgb(125, 225, 215);
+    border-radius: 3px;
+}
+
+.manage-chuyenmuc {
+    text-decoration: underline;
+}
+
+.chuyenmuc-wrapper-body {
+    margin-top: 20px;
+}
+
+.tinbai-wrapper-body {
+    border-top: 5px
+}
+
+.add-muctin {
+    margin-left: 20px;
+    outline: none;
+    border: none;
+    background: none;
+}
+
+.add-muctin:hover {
+    color: brown;
+}
+
+#yearCurrent {
+    width: 100%;
+    padding: 8px 12px;
+    outline: none;
+}
+
+table thead tr {
+    font-size: 11px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+table tbody tr td {
+    font-size: 11px;
+}
+
+.tinai-wrapper-body {
+    margin-top: 50px
+}
+
+
+/* #tinbai-list::-webkit-scrollbar {
+    width: 10px;
+    background: rgb(255, 255, 255);
+} */
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+    overflow-x: hidden!important
+}
+
+#cuocthi {
+    margin-top: 20px;
+    box-shadow: 1px 2px #ccc;
+}
+
+#tinbai-wrapper {
+    border: 1px solid #fff;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.main-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 12px 12px;
+    text-transform: uppercase;
+}
+
+.menu-admin {
+    margin: 0;
+    padding: 0 0 100px 0;
+    list-style-type: none;
+}
+
+.menu-admin-item {
+    padding: 12px 6px 12px 4px;
+    border-bottom: 1px solid white;
+    background: rgb(0 116 148);
+}
+
+.menu-admin-item:first-child {
+    border-top: 1px solid white;
+}
+
+.menu-admin-item:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.menu-admin-item a {
+    text-decoration: none;
+}
+
+.menu-item-title {
+    font-size: 13px;
+    color: white;
+}
+
+.menu-admin-item>a {
+    display: flex;
+    align-items: center;
+}
+
+.menu-item-icon {
+    color: white;
+    font-size: 20px;
+    margin-right: 8px;
+    margin-left: 8px;
+    width: 20px
+}
+
+.active {
+    opacity: 0.6
+}
+
+table thead tr {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle
+}
+
+table tbody tr td {
+    font-size: 12px;
+}
+
+#table {
+    overflow-y: auto;
+}
+
+#table thead {
+    position: sticky;
+    top: 0;
+    background-image: linear-gradient( 110deg, #0bcc74 0%, #43c064 30%, #009efd 100%);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#main {
+    margin-bottom: 20px;
+    margin-top: 40px;
+    border: 1px solid #fff;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+#quantri-list {
+    height: 32px;
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-around;
+    border-bottom: 1px solid rgb(68, 67, 67);
+    list-style-type: none;
+    font: bold 11px Tahoma, Geneva, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+.quantri-item {
+    padding: 8px 18px;
+    border-top: 1px solid rgb(68, 67, 67);
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    background: rgb(231 231 231);
+    font-weight: bold;
+    color: black;
+    margin-left: 10px;
+}
+
+.quantri-item>a {
+    text-decoration: none;
+    color: black;
+}
+
+.active-tab,
+.active1-tab {
+    background: white;
+    height: 32px;
+}
+
+.active-tab>a,
+.active1-tab>a {
+    color: rgb(204, 0, 0);
+}
+
+#quantri-detail,
+#quantri-detail-canhan {
+    margin-top: 40px;
+    position: relative;
+}
+
+.quantri-detail-head,
+#quantri-detail-canhan {
+    text-align: center;
+    font-size: 17px;
+    color: #069;
+    font-weight: bold;
+}
+
+#quantri-detail>button {
+    float: right;
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+    overflow-x: hidden!important;
+}
+
+#nav__header {
+    position: fixed;
+    z-index: 2;
+    border-bottom: 1px solid white;
+}
+
+#menu-chuyenmuc {
+    position: fixed;
+    margin-top: 57px;
+    height: 100vh
+}
+
+#chuyenmuc {
+    margin-top: 57px;
+    position: absolute;
+    right: 0
+}
+
+.menu-admin-item>a {
+    display: flex;
+    align-items: center;
+}
+
+.menu-item-icon {
+    color: white;
+    font-size: 18px;
+    margin-right: 8px;
+    margin-left: 8px;
+    width: 20px
+}
+
+.quantri-tab-select {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
+    margin-bottom: 12px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.quantri-tab-select>select {
+    font-size: 12px;
+    outline: none;
+    margin: 0 4px;
+    padding: 2px;
+    border: 1px rgb(154, 154, 154);
+    border-style: dotted
+}
+
+select {
+    outline: none
+}
+
+.clickDoi {
+    position: absolute;
+    top: -46px;
+    left: 67%;
+    font-size: 13px;
+    color: black;
+    animation: moveTop 1s cubic-bezier(0.47, 0.88, 1, 1) 0s 1 normal;
+}
+
+@keyframes moveTop {
+    from {
+        opacity: 0;
+        transform: translateY(-10px)
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+.clickDoi::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 20px;
+    left: 45%;
+    top: 16px;
+    height: 20px;
+    background-size: cover;
+    transform: rotate( 175deg);
+    background-image: url(https://tse2.mm.bing.net/th?id=OIP.QjSPu1LnqMJorbAAikn_ZQHaF7&pid=Api&P=0&w=192&h=155);
+}
+
+
+/* Responsive  / */
+
+@media (max-width:1200px) {
+    #menu-chuyenmuc {
+        position: relative;
+        height: auto
+    }
+    #chuyenmuc {
+        position: relative;
+        margin-top: 0px;
+    }
+}
+
+@media (min-width: 720px) and (max-width:960px) {
+    #quantri-list {
+        height: 36px
+    }
+    .quantri-item {
+        height: 36px;
+        font-size: 12px
+    }
+    .main-title {
+        font-size: 14px
+    }
+    .quantri-detail-head,
+    #quantri-detail-canhan {
+        font-size: 14px;
+    }
+    table>thead {
+        font-size: 12px
+    }
+    table>tbody>tr>td {
+        font-size: 12px
+    }
+}
+
+@media(max-width: 720px) {
+    #quantri-list {
+        height: 42px
+    }
+    .main-title {
+        font-size: 12px
+    }
+    .quantri-detail-head,
+    #quantri-detail-canhan {
+        font-size: 13px;
+    }
+    .quantri-item {
+        height: 42px;
+        font-size: 11px
+    }
+    table>thead {
+        font-size: 11px
+    }
+    table>tbody>tr>td {
+        font-size: 11px
+    }
+    .person-profile {
+        font-size: 12px
+    }
+    #quantri-detail-canhan>button,
+    #quantri-detail>button {
+        font-size: 11px
+    }
+}

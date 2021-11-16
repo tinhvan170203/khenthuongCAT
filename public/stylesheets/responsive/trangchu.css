@@ -1,0 +1,42 @@
+@media (max-width: 1290px) and (min-width: 1205px) {
+    .sub-menu-title {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 1204px) {
+    #nav__header {
+        display: flex;
+    }
+    #menu {
+        display: none;
+    }
+}
+
+@media (max-width:576px) {
+    .main-content-right,
+    .khenthuong-content {
+        margin: 12px auto;
+    }
+    .tinbai {
+        margin: 12px auto;
+    }
+    .lanhdao-item {
+        margin: 12px auto;
+    }
+    #bieudo-khenthuong {
+        margin-top: 12px
+    }
+    .totalDangvien,
+    .totalCanbo {
+        display: block;
+        margin-top: 8px;
+        text-align: right;
+    }
+    .nam-thiduathang,
+    .nam-dangvien,
+    .nam-thiduanam {
+        display: block;
+        margin-top: 32px;
+    }
+}

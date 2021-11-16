@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Admin quản trị chi tiết phòng, huyện, thị xã, thành phố
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css' />
+    <link rel='stylesheet' href='/stylesheets/components/navbar/style.css' />
+    <link rel='stylesheet' href='/stylesheets/admin/phongbase.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <%-include('./component/nav_phongbase.ejs')%>
+        </div>
+        <div class="row">
+            <!-- Modal add phòng, huyện, thị -->
+            <div class="modal fade" id="modalAddChuyenmuc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị phòng nghiệp vụ, công an huyện, thị xã, thành phố trong Công an tỉnh</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="phongForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="ten" class="form-label">Tên phòng, công an huyện, thị, thành phố  : </label>
+                                        <input type="text" name="ten" class="form-control" id="ten" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="kyhieu" class="form-label">Ký hiệu : </label>
+                                        <input type="text" name="kyhieu" class="form-control" id="kyhieu" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="khoi" class="form-label">Khối, lực lượng : </label>
+                                        <select name="khoi" id="khoi" class="form-select">
+                                                <option value="An ninh">An ninh</option>
+                                                <option value="Cảnh sát">Cảnh sát</option>
+                                                <option value="Xây dựng lực lượng">Xây dựng lực lượng</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit">Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal  -->
+            <!-- Modal edit phòng, huyện, thị  -->
+            <div class="modal fade" id="modalEditPhong" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị chuyên mục tin bài</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditPhongForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="tenEdit" class="form-label">Tên phòng, công an huyện, thị, thành phố  : </label>
+                                        <input type="text" name="tenEdit" class="form-control" id="tenEdit" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="kyhieuEdit" class="form-label">Ký hiệu : </label>
+                                        <input type="text" name="kyhieuEdit" class="form-control" id="kyhieuEdit" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="khoiEdit" class="form-label">Khối, lực lượng : </label>
+                                        <select name="khoiEdit" id="khoiEdit" class="form-select">
+                                                  <option value="An ninh">An ninh</option>
+                                                  <option value="Cảnh sát">Cảnh sát</option>
+                                                  <option value="Xây dựng lực lượng">Xây dựng lực lượng</option>
+                                          </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit">Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit phòng  -->
+
+            <div class="col-xl-2" id="menu-chuyenmuc">
+                <ul class="menu-admin">
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị phòng và tương đương</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị tài khoản sử dụng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị đội và tương đương</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <a href="/">
+                            <h4 class="menu-item-title">Quản trị hệ thống văn bản</h4>
+                        </a>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi tuyên truyền</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị mô hình VHVNTT </h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị chuyên mục tin bài </h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị tin bài đã đăng tải</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua năm</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                    <li class="menu-admin-item">
+                        <h4 class="menu-item-title">Quản trị kết quả thi đua tháng</h4>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xl-10" id="chuyenmuc">
+                <div id="tieudetrang" class="animate__animated animate__fadeInUp">
+                    <h3 class="tieudetrang">Quản trị phòng nghiệp vụ, công an các huyện, thị xã, thành phố</h3>
+                </div>
+                <div class="col-xl-12 animate__animated animate__fadeIn" id="main">
+                    <table id="table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">STT</th>
+                                <th style="text-align: center;">Ký hiệu</th>
+                                <th style="text-align: center;">Tên phòng, công an huyện, thị, thành phố</th>
+                                <th style="text-align: center;">Khối</th>
+                                <th style="text-align: center;"></th>
+                                <th style="text-align: center;"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Toast  Thêm VB thành công-->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="add-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header text-white bg-primary">
+                    <!-- <img src="" class="rounded me-2" alt="..."> -->
+                    <strong class="me-auto">Thành công</strong>
+                    <small>Vừa xong</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Thêm mới thành công.
+                </div>
+            </div>
+        </div>
+        <!-- End Toast  -->
+        <!-- Toast  Edit VB thành công-->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="edit-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header text-white bg-primary">
+                    <!-- <img src="" class="rounded me-2" alt="..."> -->
+                    <strong class="me-auto">Thành công</strong>
+                    <small>Vừa xong</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Cập nhật thành công.
+                </div>
+            </div>
+        </div>
+        <!-- End Toast  -->
+        <!-- Toast  Edit VB thành công-->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="delete-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header text-white bg-primary">
+                    <!-- <img src="" class="rounded me-2" alt="..."> -->
+                    <strong class="me-auto">Thành công</strong>
+                    <small>Vừa xong</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Xóa thành công.
+                </div>
+            </div>
+        </div>
+        <!-- End Toast  -->
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/admin/phong.js"></script>
+    <!-- Highchart  -->
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
+</body>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+</script>
+
+
+</html>

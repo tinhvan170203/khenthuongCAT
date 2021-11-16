@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Công tác tuyên truyền trong Công an tỉnh
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css' />
+    <!-- <link rel='stylesheet' href='/stylesheets/components/navbar/style.css' /> -->
+    <link rel='stylesheet' href='/stylesheets/congtactuyentruyen/style.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <%-include('../components/nav_tuyentruyen')%>
+        </div>
+        <div class="row">
+            <div class="modal fade" id="modalRedirect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị chi tiết đơn vị cấp phòng, huyện, thị xã, thành phố</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="cuocthiForm" class="row g-3">
+                                    <div class="col-xl-12">
+                                        <label for="ten" class="form-label">Chọn đơn vị muốn quản trị chi tiết tập thể đơn vị hoặc cá nhân: </label>
+                                        <select id="donvi" class="form-select">
+                                             <option value="" hidden disabled selected>-- Chọn mục này --</option>
+                                             <% if(list.length > 0){
+                                                  list.forEach(i=>{ %>
+                                                       <option value="<%=i._id%>"><%=i.ten%></option>
+                                               <%   })
+                                             } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="redirect" class="btn btn-primary add" disabled type="submit">Đi tới trang</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal add chuyên mục -->
+            <div class="modal fade" id="modalAddChuyenmuc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị chuyên mục tin bài trong Công an tỉnh</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="chuyenmucForm" class="row g-3" enctype="multipart/form-data" action="/addChuyenmuc" method="POST">
+                                    <div class="col-md-12">
+                                        <label for="tenchuyenmuc" class="form-label">Chuyên mục : </label>
+                                        <input type="text" name="tenchuyenmuc" class="form-control" id="tenchuyenmuc" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit">Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal  -->
+            <!-- Modal edit chuyên mục  -->
+            <div class="modal fade" id="modalEditChuyenmuc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị chuyên mục tin bài</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditChuyenmucForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="Edit_tenchuyenmuc" class="form-label">Chuyên mục : </label>
+                                        <input type="text" name="Edit_tenchuyenmuc" class="form-control" id="Edit_tenchuyenmuc" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit">Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit chuyên mục  -->
+            <!-- Modal add mục tin -->
+            <div class="modal fade" id="modalAddMuctin" tabindex="-1" aria-labelledby="muctinModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="muctinModalLabel">Thêm mới mục tin</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="muctinForm" class="row g-3" action="/addMuctin" method="POST">
+                                    <div class="col-md-12">
+                                        <label for="muctin" class="form-label">Mục tin : </label>
+                                        <input type="text" name="muctin" class="form-control" id="muctin" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit">Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal add mục tin -->
+            <!-- Modal edit mục tin -->
+            <div class="modal fade" id="modalEditMuctin" tabindex="-1" aria-labelledby="MuctinLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="MuctinLabel">Quản trị mục tin</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditMuctinForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="Edit_muctin" class="form-label">Mục tin : </label>
+                                        <input type="text" name="Edit_muctin" class="form-control" id="Edit_muctin" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit">Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit mục tin  -->
+            <div class="col-xl-2" id="menu-chuyenmuc">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                Quản lý tên chuyên mục
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <ul class="demuc-list" id="chuyenmuc-list">
+                                    <% if(chuyenmucList.length > 0) { 
+                                        chuyenmucList.forEach(chuyenmuc=>{ %>
+                                        <li class="demuc-item" id=<%=chuyenmuc._id%>>
+                                            <img src="http://congan.hungyen.gov.vn/images/footer-logo.png" alt="" class="demuc-item-img">
+                                            <span class="demuc-item-title"><%=chuyenmuc.tenchuyenmuc%></span>
+                                            <div class="demuc-item-action">
+                                                <i class="fas fa-pen edit-demuc" data-bs-toggle="modal" data-bs-target="#modalEditChuyenmuc" data-bs-backdrop='static' title="Sửa"></i>
+                                                <i class="fas fa-times-circle delete-demuc" title="Xóa"></i>
+                                            </div>
+                                        </li>
+                                        <%  })
+                                  }%>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chitiet-chuyenmuc">Chuyên mục:</div>
+                    <% if(chuyenmucList.length > 0) { 
+                        chuyenmucList.forEach(chuyenmuc=>{ %>
+                        <div class="accordion-item getmuctin">
+                            <a href="#">
+                                <h2 class="accordion-header" id="flush-heading-<%=chuyenmuc._id%>">
+                                    <button id="<%=chuyenmuc._id%>-btn" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-<%=chuyenmuc._id%>" aria-expanded="false" aria-controls="flush-collapseOne"><%=chuyenmuc.tenchuyenmuc%> </button>
+                                </h2>
+                                <div id="flush-collapse-<%=chuyenmuc._id%>" class="accordion-collapse collapse" aria-labelledby="flush-heading-<%=chuyenmuc._id%>" data-bs-parent="#accordionFlushExample">
+                                </div>
+                            </a>
+                        </div>
+                        <%  })
+                    } %>
+                </div>
+            </div>
+            <div class="col-xl-10" id="chuyenmuc">
+                <div id="tieudetrang" class="animate__animated animate__fadeInUp">
+                    <h3 class="tieudetrang">Công tác tuyên truyền trong Công an tỉnh</h3>
+                </div>
+                <div class="col-xl-12 animate__animated animate__fadeIn" id="chuyenmuc-main">
+                    <div class="col-xl-11" id="chuyenmuc-wrapper">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="chuyenmuc-wrapper-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                        <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                    </svg>
+                                    <h5>Quản trị mục tin trong chuyên mục <em class="manage-chuyenmuc"></em></h5>
+                                    <button class="add-muctin" data-bs-toggle="modal" data-bs-target="#modalAddMuctin" data-bs-backdrop='static'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                                            <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
+                                            <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z"/>
+                                          </svg>
+                                          Thêm mục tin
+                                    </button>
+                                </div>
+                                <div class="chuyenmuc-wrapper-body">
+                                    <table class="table table-striped" id="muctin-list" style="width: 100%">
+                                        <thead>
+                                            <th>Tên mục tin</th>
+                                            <th></th>
+                                            <th></th>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col-xl-12" id="bieudo-list"> -->
+                        <!-- Biểu đồ thống kê tin bài theo tháng cả năm  -->
+                        <!-- <figure class="highcharts-figure">
+                                    <div id="thongke-tinbai"></div>
+                                </figure> -->
+                        <!-- End biều đồ  -->
+                        <!-- </div>
+                            <div class="col-xl-9">
+                                <div id="action-filter">
+                                    <div class="action-filter-head">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                            <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                        <h5 class="year-choose">Thống kê chi tiết số tin bài:</h5>
+                                        <span class="action-filter-item active">Định kì hàng tháng</span>
+                                        <span class="action-filter-item">Định kì 6 tháng</span>
+                                        <span class="action-filter-item">Theo quý</span>
+                                    </div>
+                                    <div class="action-filter-body"> -->
+                        <!-- Bảng định kì hàng tháng  -->
+                        <!-- <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Loại tin</th>
+                                                    <th>Th1</th>
+                                                    <th>Th2</th>
+                                                    <th>Th3</th>
+                                                    <th>Th4</th>
+                                                    <th>Th5</th>
+                                                    <th>Th6</th>
+                                                    <th>Th7</th>
+                                                    <th>Th8</th>
+                                                    <th>Th9</th>
+                                                    <th>Th10</th>
+                                                    <th>Th11</th>
+                                                    <th>Th12</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Giáo dục học đường</td>
+                                                    <td>2</td>
+                                                    <td>5</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Giáo dục học đường</td>
+                                                    <td>2</td>
+                                                    <td>5</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                    <td>8</td>
+                                                </tr>
+                                            </tbody>
+                                        </table> -->
+                        <!-- End bảng định kì hàng tháng  -->
+                        <!-- </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3"></div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Toast  Thêm VB thành công-->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1111">
+            <div id="add-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header text-white bg-primary">
+                    <!-- <img src="" class="rounded me-2" alt="..."> -->
+                    <strong class="me-auto">Thành công</strong>
+                    <small>Vừa xong</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Thêm mới thành công.
+                </div>
+            </div>
+        </div>
+        <!-- End Toast  -->
+        <!-- Toast  Edit VB thành công-->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1111">
+            <div id="edit-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header text-white bg-primary">
+                    <!-- <img src="" class="rounded me-2" alt="..."> -->
+                    <strong class="me-auto">Thành công</strong>
+                    <small>Vừa xong</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Cập nhật thành công.
+                </div>
+            </div>
+        </div>
+        <!-- End Toast  -->
+        <!-- Toast  Edit VB thành công-->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1111">
+            <div id="delete-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header text-white bg-primary">
+                    <!-- <img src="" class="rounded me-2" alt="..."> -->
+                    <strong class="me-auto">Thành công</strong>
+                    <small>Vừa xong</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Xóa thành công.
+                </div>
+            </div>
+        </div>
+        <!-- End Toast  -->
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/tuyentruyen/quanlychuyenmuc.js"></script>
+    <script src="/javascripts/logout.js"></script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,342 @@
+body {
+    font-size: 14px
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#tieudetrang {
+    margin-top: 20px;
+    position: relative;
+    animation: tieudetrang duration timing-function 0s none direction fill-mode;
+}
+
+#tieudetrang::after {
+    top: calc(100% + 5px);
+    position: absolute;
+    content: '';
+    display: block;
+    width: 24%;
+    height: 2px;
+    background: chocolate;
+    margin: 0 38%;
+}
+
+.tieudetrang {
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #bebaba;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    text-align: right;
+    margin-bottom: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent;
+    margin-left: 3px;
+    outline: none;
+}
+
+table {
+    width: 100%;
+}
+
+table thead {
+    font-size: 13px;
+    background-image: linear-gradient( 110deg, #0bcc74 0%, #43c064 30%, #009efd 100%);
+    color: white;
+}
+
+table tbody {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgb(62, 62, 62)
+}
+
+table tbody tr {
+    vertical-align: middle;
+}
+
+.modal-dialog {
+    max-width: 950px;
+    font-size: 14px;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.form-control {
+    font-size: 14px;
+}
+
+.modal-body select {
+    font-size: 14px;
+}
+
+.modal-body label {
+    color: firebrick;
+    font-weight: 550;
+}
+
+table.dataTable {
+    width: 100%;
+    margin: 0 auto;
+    clear: both;
+    border-collapse: collapse !important;
+    border-spacing: 0px;
+}
+
+.table-bordered>:not(caption)>* {
+    border-width: 1px 0;
+    border-color: #afb1af;
+}
+
+.toast-header {
+    background: rgb(40, 111, 40);
+    color: white;
+}
+
+.editVB,
+.deleteVB:hover {
+    cursor: pointer;
+}
+
+.accordion-button {
+    font-size: 13px;
+    background: rgb(0 116 148);
+    color: white;
+    padding-right: 4px;
+}
+
+.accordion-button:not(.collapsed) {
+    background: rgb(215 218 218);
+    text-decoration: underline;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: url('/images/dang.jpg');
+    transform: rotate(360deg);
+    background-size: 16px;
+}
+
+.accordion-button::after {
+    top: 20px;
+    background-size: 16px;
+    background-image: url('https://static.cbox.ws/flags/vn.png');
+}
+
+.accordion-item>a {
+    text-decoration: none;
+}
+
+.accordion-body {
+    padding: 0;
+}
+
+#menu-chuyenmuc {
+    background: rgb(239 239 239);
+    border-right: 1px solid rgb(147, 147, 147);
+    padding: 0;
+    overflow-y: scroll;
+}
+
+#menu-chuyenmuc::-webkit-scrollbar {
+    width: 3px;
+}
+
+#menu-chuyenmuc::-webkit-scrollbar-thumb {
+    background-color: rgb(230, 230, 230);
+    border-radius: 5px;
+}
+
+.demuc-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.demuc-item {
+    padding-left: 24px;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    transition: all 0.3s;
+    position: relative;
+    border-bottom: 1px solid #666;
+}
+
+.demuc-item-img {
+    width: 16px;
+}
+
+.demuc-item-title {
+    font-size: 12px;
+    color: #5b4e4e;
+    margin-left: 2px;
+    transition: all 0.3s;
+}
+
+.demuc-item:last-child {
+    border-bottom: none;
+}
+
+.demuc-item:hover {
+    background: #999;
+    cursor: pointer;
+}
+
+.demuc-item:hover .demuc-item-title {
+    color: white;
+}
+
+.demuc-item-action {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.chitiet-chuyenmuc {
+    padding: 6px 10px;
+    font-weight: 550;
+}
+
+
+/* Highchart  */
+
+
+/* Bỏ bars trong đồ thị  */
+
+.highcharts-exporting-group {
+    display: none;
+}
+
+.highcharts-figure {
+    margin-bottom: 0;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    font-size: 12px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 12px;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    font-size: 12px
+}
+
+.dataTables_wrapper {
+    margin-top: 3px
+}
+
+.modal-title {
+    flex: 1;
+    text-align: center;
+}
+
+.btn {
+    padding: .15rem .5rem;
+    box-shadow: 1px 1px #ccc;
+}
+
+table.dataTable tbody tr.selected {
+    background-color: #d89754!important;
+}
+
+table.dataTable tbody>tr.selected,
+table.dataTable tbody>tr>.selected {
+    color: black;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+    padding: 6px 8px!important
+}
+
+.addVB {
+    color: white;
+    margin-right: 20px;
+    transition: all 0.3s;
+}
+
+.addVB::after {
+    content: '';
+    display: block;
+    clear: both;
+    transition: all 0.5s;
+    width: 0;
+    opacity: 0;
+    height: 3px;
+    background: blanchedalmond;
+}
+
+.addVB:hover {
+    color: chocolate;
+    cursor: pointer;
+}
+
+.addVB:hover:after {
+    width: 100%;
+    opacity: 1;
+    background: chocolate;
+}
+
+.change-pass:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+@media (min-width: 720px) and (max-width:1200px) {
+    .menu-admin {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .menu-admin-item:first-child {
+        border-top: 0px solid
+    }
+    .menu-admin-item {
+        flex-basis: 33.3333%;
+        border-right: 1px solid #c4c4c4;
+        padding: 12px 6px 12px 4px;
+        border-bottom: 1px solid white;
+        background: rgb(0 116 148);
+    }
+}
+
+.nav__header-right {
+    display: flex;
+    align-items: baseline;
+    color: white;
+}
+
+.change-pass,
+.admin-name {
+    margin-left: 5px;
+}
+
+.dataTables_wrapper {
+    overflow-x: scroll
+}
+

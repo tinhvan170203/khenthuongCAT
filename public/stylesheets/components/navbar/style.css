@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+p,
+hi,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0;
+}
+
+#nav__header {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    background: rgb(0 116 148);
+    justify-content: space-between;
+}
+
+.nav__header-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav__header-left-icon {
+    color: white;
+    font-size: 24px;
+}
+
+#logo-img {
+    width: 50px;
+    margin-left: 12px;
+}
+
+.offcanvas-start {
+    width: 350px;
+}
+
+.offcanvas-header {
+    border-bottom: 1px solid #777;
+    padding: 12px 12px;
+}
+
+.offcanvas-body {
+    overflow-y: hidden;
+    padding: 0;
+}
+
+#main-menu {
+    margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+#main-menu>a {
+    text-decoration: none;
+}
+
+#main-menu .main-menu-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    transition: all 0.2s;
+    position: relative;
+    height: 89px;
+    font-weight: 550;
+}
+
+.main-menu-item>.main-menu-item-sym {
+    font-size: 30px;
+}
+
+.main-menu-item-title {
+    padding-left: 13px;
+}
+
+.main-menu-item:hover {
+    background: rgb(232, 232, 232);
+    color: rgb(14, 14, 14);
+}
+
+.nav__header-right {
+    display: flex;
+    align-items: baseline;
+}
+
+.offcanvas-header {
+    background: rgb(0, 94, 152);
+    height: 56px;
+}

@@ -1,0 +1,535 @@
+#tieudetrang {
+    margin-top: 20px;
+    position: relative;
+    animation: tieudetrang duration timing-function 0s none direction fill-mode;
+}
+
+#tieudetrang::after {
+    top: calc(100% + 5px);
+    position: absolute;
+    content: '';
+    display: block;
+    width: 24%;
+    height: 2px;
+    background: chocolate;
+    margin: 0 38%;
+}
+
+.tieudetrang {
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+}
+
+#vanban {
+    margin: 50px auto;
+}
+
+#myTable thead {
+    background-image: linear-gradient( 110deg, #0bcc74 0%, #43c064 30%, #009efd 100%);
+    color: white;
+}
+
+.text-note {
+    font-weight: 750;
+    color: rgb(28, 28, 28);
+}
+
+.main-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 12px 12px;
+    text-transform: uppercase;
+}
+
+.menu-admin {
+    margin: 0;
+    padding: 0 0 100px 0;
+    list-style-type: none;
+}
+
+.menu-admin-item {
+    padding: 12px 6px 12px 4px;
+    border-bottom: 1px solid white;
+    background: rgb(0 116 148);
+}
+
+.menu-admin-item:first-child {
+    border-top: 1px solid white;
+}
+
+.menu-admin-item:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.menu-admin-item a {
+    text-decoration: none;
+}
+
+.menu-item-title {
+    font-size: 13px;
+    color: white;
+}
+
+.menu-admin-item>a {
+    display: flex;
+    align-items: center;
+}
+
+.menu-item-icon {
+    color: white;
+    font-size: 20px;
+    margin-right: 8px;
+    margin-left: 8px;
+    width: 20px
+}
+
+.active {
+    opacity: 0.6
+}
+
+.preview-img {
+    margin-top: 10px;
+    width: 100%;
+    height: 300px;
+    background: #dedede;
+    border-radius: 10px;
+    /* box-shadow: -1px 2px #888 */
+}
+
+#anhminhhoa,
+#anhminhhoa1 {
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+}
+
+#newMohinh h4,
+#editMohinh h4 {
+    font-size: 15px;
+    font-weight: 550;
+}
+
+#content-img,
+#content-img1 {
+    margin-top: 20px;
+    width: 100%;
+    max-height: 200px;
+    min-height: 200px;
+    padding: 10px 16px;
+    font-size: 13px;
+    margin-bottom: 0px;
+}
+
+#isDisplay,
+#isDisplay1 {
+    width: 70%;
+    padding: 3px;
+}
+
+#mohinh {
+    margin-top: 40px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.online {
+    outline: none;
+    padding: 4px 12px;
+    color: white;
+    font-weight: 550;
+    border: 2px solid #ccc;
+    background: seagreen;
+}
+
+.offline {
+    outline: none;
+    padding: 4px 12px;
+    color: rgb(26, 25, 25);
+    font-weight: 550;
+    border: 2px solid #ccc;
+    background: rgb(163, 165, 164);
+}
+
+.selected {
+    background: rgb(220, 217, 217);
+}
+
+#mohinh {
+    max-height: 430px;
+    overflow-y: scroll;
+    margin: 40px auto;
+    margin-bottom: 5px;
+    background: white;
+    border: 2px solid #ccc;
+}
+
+#chuyenmuc {
+    background: #f5f5f5;
+}
+
+.save {
+    background: #d4d40c;
+    font-size: 14px;
+    font-weight: 550;
+    border: 1px solid white;
+    color: #161616;
+    margin-left: 4%;
+    transform: translateX(50px);
+    transition: all 0.3s;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.save:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.show {
+    visibility: visible;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast {
+    margin: 0 auto
+}
+
+.top-0 {
+    top: -20px!important;
+}
+
+.btn {
+    font-size: 12px;
+}
+
+
+/* Sidebar-left  */
+
+.main-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 12px 12px;
+    text-transform: uppercase;
+}
+
+.menu-admin {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.menu-admin-item {
+    padding: 12px 6px 12px 4px;
+    border-bottom: 1px solid white;
+    background: rgb(0 116 148);
+}
+
+.menu-admin-item:first-child {
+    border-top: 1px solid white;
+}
+
+.menu-admin-item:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.menu-admin-item a {
+    text-decoration: none;
+}
+
+.menu-item-title {
+    font-size: 13px;
+    color: white;
+}
+
+.menu-admin-item>a {
+    display: flex;
+    align-items: center;
+}
+
+.menu-item-icon {
+    color: white;
+    font-size: 20px;
+    margin-right: 8px;
+    margin-left: 8px;
+    width: 20px
+}
+
+.active {
+    opacity: 0.6
+}
+
+table thead tr {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle
+}
+
+table tbody tr td {
+    font-size: 12px;
+}
+
+#table {
+    overflow-y: auto;
+}
+
+#table thead {
+    position: sticky;
+    top: 0;
+    background-image: linear-gradient( 110deg, #0bcc74 0%, #43c064 30%, #009efd 100%);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#main {
+    margin-bottom: 20px;
+    margin-top: 40px;
+    border: 1px solid #fff;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+#quantri-list {
+    height: 32px;
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-around;
+    border-bottom: 1px solid rgb(68, 67, 67);
+    list-style-type: none;
+    font: bold 11px Tahoma, Geneva, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+.quantri-item {
+    padding: 8px 18px;
+    border-top: 1px solid rgb(68, 67, 67);
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    background: rgb(231 231 231);
+    font-weight: bold;
+    color: black;
+    margin-left: 10px;
+}
+
+.quantri-item>a {
+    text-decoration: none;
+    color: black;
+}
+
+.active-tab,
+.active1-tab {
+    background: white;
+    height: 32px;
+}
+
+.active-tab>a,
+.active1-tab>a {
+    color: rgb(204, 0, 0);
+}
+
+#quantri-detail,
+#quantri-detail-canhan {
+    margin-top: 40px;
+    position: relative;
+}
+
+.quantri-detail-head,
+#quantri-detail-canhan {
+    text-align: center;
+    font-size: 17px;
+    color: #069;
+    font-weight: bold;
+}
+
+#quantri-detail>button {
+    float: right;
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+    overflow-x: hidden!important;
+}
+
+#nav__header {
+    position: fixed;
+    z-index: 2;
+    border-bottom: 1px solid white;
+}
+
+#menu-chuyenmuc {
+    position: fixed;
+    margin-top: 57px;
+    height: 100vh
+}
+
+#chuyenmuc {
+    margin-top: 57px;
+    position: absolute;
+    right: 0
+}
+
+.menu-admin-item>a {
+    display: flex;
+    align-items: center;
+}
+
+.menu-item-icon {
+    color: white;
+    font-size: 18px;
+    margin-right: 8px;
+    margin-left: 8px;
+    width: 20px
+}
+
+.quantri-tab-select {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
+    margin-bottom: 12px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.quantri-tab-select>select {
+    font-size: 12px;
+    outline: none;
+    margin: 0 4px;
+    padding: 2px;
+    border: 1px rgb(154, 154, 154);
+    border-style: dotted
+}
+
+select {
+    outline: none
+}
+
+.clickDoi {
+    position: absolute;
+    top: -46px;
+    left: 67%;
+    font-size: 13px;
+    color: black;
+    animation: moveTop 1s cubic-bezier(0.47, 0.88, 1, 1) 0s 1 normal;
+}
+
+@keyframes moveTop {
+    from {
+        opacity: 0;
+        transform: translateY(-10px)
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+.clickDoi::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 20px;
+    left: 45%;
+    top: 16px;
+    height: 20px;
+    background-size: cover;
+    transform: rotate( 175deg);
+    background-image: url(https://tse2.mm.bing.net/th?id=OIP.QjSPu1LnqMJorbAAikn_ZQHaF7&pid=Api&P=0&w=192&h=155);
+}
+
+
+/* Responsive  / */
+
+@media (max-width:1200px) {
+    #menu-chuyenmuc {
+        position: relative;
+        height: auto
+    }
+    #chuyenmuc {
+        position: relative;
+        margin-top: 0px;
+    }
+}
+
+@media (min-width: 720px) and (max-width:960px) {
+    #quantri-list {
+        height: 36px
+    }
+    .quantri-item {
+        height: 36px;
+        font-size: 12px
+    }
+    .main-title {
+        font-size: 14px
+    }
+    .quantri-detail-head,
+    #quantri-detail-canhan {
+        font-size: 14px;
+    }
+    table>thead {
+        font-size: 12px
+    }
+    table>tbody>tr>td {
+        font-size: 12px
+    }
+}
+
+@media(max-width: 720px) {
+    #quantri-list {
+        height: 42px
+    }
+    .main-title {
+        font-size: 12px
+    }
+    .quantri-detail-head,
+    #quantri-detail-canhan {
+        font-size: 13px;
+    }
+    .quantri-item {
+        height: 42px;
+        font-size: 11px
+    }
+    table>thead {
+        font-size: 11px
+    }
+    table>tbody>tr>td {
+        font-size: 11px
+    }
+    .person-profile {
+        font-size: 12px
+    }
+    #quantri-detail-canhan>button,
+    #quantri-detail>button {
+        font-size: 11px
+    }
+}
+
+.btn {
+    font-size: 12px;
+}
+
+
+/* .up {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+}
+
+.down {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+} */

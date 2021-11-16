@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Quản trị Công tác điều lệnh trong Công an tỉnh
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css' />
+    <link rel='stylesheet' href='/stylesheets/components/navbar/style.css' />
+    <link rel='stylesheet' href='/stylesheets/vannghethethao/style.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <%-include('../admin/component/nav_chitietphong')%>
+        </div>
+        <div class="row">
+            <div class="modal fade" id="modalRedirect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị chi tiết đơn vị cấp phòng, huyện, thị xã, thành phố</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="redirectForm" class="row g-3">
+                                    <div class="col-xl-12">
+                                        <label for="ten" class="form-label">Chọn đơn vị muốn quản trị chi tiết tập thể đơn vị hoặc cá nhân: </label>
+                                        <select id="donvi" class="form-select">
+                                             <option value="" hidden disabled selected>-- Chọn mục này --</option>
+                                             <% if(list.length > 0){
+                                                  list.forEach(i=>{ %>
+                                                       <option value="<%=i._id%>"><%=i.ten%></option>
+                                               <%   })
+                                             } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="redirect" class="btn btn-primary add" disabled type="submit">Đi tới trang</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal add cuộc thi -->
+            <div class="modal fade" id="modalAddCuocthi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới kết quả kiểm tra điều lệnh của Đội điều lệnh Công an tỉnh</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="cuocthiForm" class="row g-3">
+                                    <div class="col-xl-6">
+                                        <label for="donviduockiemtra" class="form-label">Đối tượng được kiểm tra: </label>
+                                        <input type="text" class="form-control" name="donviduockiemtra" id="donviduockiemtra" required>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <label for="thoigian" class="form-label">Thời gian bắt đầu tiến hành kiểm tra: </label>
+                                        <input type="datetime-local" max="<%-maxDate%>" class="form-control" name="thoigian" id="thoigian" required>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="ketqua" class="form-label">Kết quả phát hiện: </label>
+                                        <input type="text" name="ketqua" class="form-control" id="ketqua" required>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="xuli" class="form-label">Nội dung chấn chỉnh, xử lí: </label>
+                                        <input type="text" name="xuli" class="form-control" id="xuli" required>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="tep" class="form-label">Biên bản Word đính kèm: </label>
+                                        <input type="file" name="tep" class="form-control" id="tep" accept=".docx, doc" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal add cuộc thi  -->
+            <!-- Modal edit cuộc thi -->
+            <div class="modal fade" id="modalEditCuocthi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa kết quả kiểm tra điều lệnh của Đội điều lệnh Công an tỉnh</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditCuocthiForm" class="row g-3">
+                                    <div class="col-xl-6">
+                                        <label for="donviduockiemtra_Edit" class="form-label">Đối tượng được kiểm tra: </label>
+                                        <input type="text" class="form-control" name="donviduockiemtra_Edit" id="donviduockiemtra_Edit" required>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <label for="thoigian_Edit" class="form-label">Thời gian bắt đầu tiến hành kiểm tra: </label>
+                                        <input type="datetime-local" max="<%-maxDate%>" class="form-control" name="thoigian_Edit" id="thoigian_Edit" required>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="ketqua_Edit" class="form-label">Kết quả phát hiện: </label>
+                                        <input type="text" name="ketqua_Edit" class="form-control" id="ketqua_Edit" required>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="xuli_Edit" class="form-label">Nội dung chấn chỉnh, xử lí: </label>
+                                        <input type="text" name="xuli_Edit" class="form-control" id="xuli_Edit" required>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="tep_old" class="form-label">Tệp word đính kèm: </label>
+                                        <a id="tep_old" class="download"></a>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="tep_Edit" class="form-label">Thay đổi tệp Word đính kèm: </label>
+                                        <input type="file" name="tep_Edit" class="form-control" id="tep_Edit" accept=".docx, doc">
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit cuộc thi  -->
+            <!-- menu-left  -->
+            <div class="col-xl-2" id="menu-chuyenmuc">
+                <ul class="menu-admin">
+                    <select class="nam" id="nam" style="width: 100%;padding: 12px;">
+                        <% while (2015 <= nam){ %>                  
+                            <option value="<%=nam%>">Năm <%=nam%></option>                                
+                            <%   nam -= 1;
+                        };%>
+                    </select>
+                    <% if(allRole.indexOf('xem-danh-sach-phan-quyen') !== -1){ %>
+                        <li class="menu-admin-item">
+                            <a href="/quantrihethong/nhomquyen">
+                                <i class="fas fa-project-diagram menu-item-icon"></i>
+                                <h4 class="menu-item-title">Quản trị nhóm quyền</h4>
+                            </a>
+                        </li>
+                        <%  } %>
+                            <% if(allRole.indexOf('xem-danh-sach-nguoi-dung') !== -1){ %>
+                                <li class="menu-admin-item">
+                                    <a href="/quantrihethong/quantritaikhoan">
+                                        <i class="fas fa-user-shield menu-item-icon"></i>
+                                        <h4 class="menu-item-title">Quản trị tài khoản</h4>
+                                    </a>
+                                </li>
+                                <%  } %>
+                                    <% if(allRole.indexOf('xem-danh-sach-phong') !== -1){ %>
+                                        <li class="menu-admin-item">
+                                            <a href="/admin/quantriphong">
+                                                <i class="fab fa-microsoft menu-item-icon"></i>
+                                                <h4 class="menu-item-title">Quản trị tên phòng, huyện</h4>
+                                            </a>
+                                        </li>
+                                        <%  } %>
+                                            <% if(allRole.indexOf('xem-khen-thuong-phong') !== -1
+                            || allRole.indexOf('xem-thi-dua-phong') !== -1 || allRole.indexOf('xem-danh-sach-doi') !== -1
+                            || allRole.indexOf('xem-khen-thuong-doi') !== -1 || allRole.indexOf('xem-danh-sach-can-bo') !== -1
+                            || allRole.indexOf('xem-thi-dua-thang') !== -1 || allRole.indexOf('xem-thi-dua-nam') !== -1
+                            || allRole.indexOf('xem-xep-loai-dang-vien') !== -1 || allRole.indexOf('xem-ki-luat-ca-nhan') !== -1
+                            || allRole.indexOf('xem-khen-thuong-ca-nhan') !== -1
+                             ){ %>
+                                                <li class="menu-admin-item">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalRedirect" data-bs-backdrop='static'>
+                                                        <i class="fas fa-house-user menu-item-icon"></i>
+                                                        <h4 class="menu-item-title">Quản trị chi tiết đơn vị</h4>
+                                                    </a>
+                                                </li>
+                                                <%  } %>
+                                                    <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                        <li class="menu-admin-item">
+                                                            <a href="/loaivanban">
+                                                                <i class="fas fa-scroll menu-item-icon"></i>
+                                                                <h4 class="menu-item-title">Quản trị loại văn bản</h4>
+                                                            </a>
+                                                        </li>
+                                                        <%   } %>
+                                                            <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                                <li class="menu-admin-item">
+                                                                    <a href="/quantrivanban">
+                                                                        <i class="fas fa-scroll menu-item-icon"></i>
+                                                                        <h4 class="menu-item-title">Quản trị văn bản</h4>
+                                                                    </a>
+                                                                </li>
+                                                                <%   } %>
+                                                                    <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                                        <li class="menu-admin-item">
+                                                                            <a href="/coquanbanhanh">
+                                                                                <i class="fas fa-scroll menu-item-icon"></i>
+                                                                                <h4 class="menu-item-title">Quản trị CQBH văn bản</h4>
+                                                                            </a>
+                                                                        </li>
+                                                                        <%   } %>
+                                                                            <% if(allRole.indexOf('xem-hoat-dong-tieu-bieu') !== -1){%>
+                                                                                <li class="menu-admin-item">
+                                                                                    <a href="/vannghethethao/quantri/hoatdongtieubieu">
+                                                                                        <i class="fas fa-running menu-item-icon"></i>
+                                                                                        <h4 class="menu-item-title">Hoạt động VN - TT tiêu biểu</h4>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <%   } %>
+                                                                                    <% if(allRole.indexOf('xem-mo-hinh') !== -1){%>
+                                                                                        <li class="menu-admin-item">
+                                                                                            <a href="/vannghethethao/quantri/mohinhtieubieu">
+                                                                                                <i class="fab fa-studiovinari menu-item-icon"></i>
+                                                                                                <h4 class="menu-item-title">Mô hình VHVN - TT nổi bật</h4>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <%   } %>
+                                                                                            <% if(allRole.indexOf('xem-ket-qua-the-thao') !== -1
+                                                                            || allRole.indexOf('xem-mon-the-thao') !== -1
+                                                                             || allRole.indexOf('xem-ca-nhan-the-thao-dien-hinh') !== -1
+                                                                            ){%>
+                                                                                                <li class="menu-admin-item">
+                                                                                                    <a href="/vannghethethao/quantri/thethao">
+                                                                                                        <i class="fas fa-biking menu-item-icon"></i>
+                                                                                                        <h4 class="menu-item-title">Quản trị thể thao</h4>
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                                <%   } %>
+                                                                                                    <% if(allRole.indexOf('xem-ket-qua-van-nghe') !== -1
+                                                                            || allRole.indexOf('xem-the-loai-van-nghe') !== -1
+                                                                             || allRole.indexOf('xem-ca-nhan-van-nghe-dien-hinh') !== -1
+                                                                            ){%>
+                                                                                                        <li class="menu-admin-item">
+                                                                                                            <a href="/vannghethethao/quantri/vannghe">
+                                                                                                                <i class="fas fa-music menu-item-icon"></i>
+                                                                                                                <h4 class="menu-item-title">Quản trị văn hóa văn nghệ</h4>
+                                                                                                            </a>
+                                                                                                        </li>
+                                                                                                        <%   } %>
+                                                                                                            <% if(allRole.indexOf('xem-chuyen-muc') !== -1){%>
+                                                                                                                <li class="menu-admin-item">
+                                                                                                                    <a href="/tuyentruyen/quantri/chuyenmuc">
+                                                                                                                        <i class="fab fa-apple menu-item-icon"></i>
+                                                                                                                        <h4 class="menu-item-title">Quản trị chuyên mục</h4>
+                                                                                                                    </a>
+                                                                                                                </li>
+                                                                                                                <%   } %>
+                                                                                                                    <% if(allRole.indexOf('xem-muc-tin') !== -1){%>
+                                                                                                                        <li class="menu-admin-item">
+                                                                                                                            <a href="/tuyentruyen/quantri/muctin">
+                                                                                                                                <i class="fab fa-edge menu-item-icon"></i>
+                                                                                                                                <h4 class="menu-item-title">Quản trị mục tin</h4>
+                                                                                                                            </a>
+                                                                                                                        </li>
+                                                                                                                        <%   } %>
+                                                                                                                            <% if(allRole.indexOf('xem-tin-bai') !== -1){%>
+                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                    <a href="/tuyentruyen/quantri/tinbai">
+                                                                                                                                        <i class="fas fa-fan menu-item-icon"></i>
+                                                                                                                                        <h4 class="menu-item-title">Quản trị tin bài</h4>
+                                                                                                                                    </a>
+                                                                                                                                </li>
+                                                                                                                                <%   } %>
+                                                                                                                                    <% if(allRole.indexOf('xem-cuoc-thi-tuyen-truyen') !== -1){%>
+                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                            <a href="/tuyentruyen/quantri/ketquathi">
+                                                                                                                                                <i class="fab fa-modx menu-item-icon"></i>
+                                                                                                                                                <h4 class="menu-item-title">Quản trị thi tuyên truyền</h4>
+                                                                                                                                            </a>
+                                                                                                                                        </li>
+                                                                                                                                        <%   } %>
+                                                                                                                                            <% if(allRole.indexOf('xem-ket-qua-kiem-tra-px03') !== -1){%>
+                                                                                                                                                <li class="menu-admin-item active">
+                                                                                                                                                    <a href="#">
+                                                                                                                                                        <i class="fab fa-shirtsinbulk menu-item-icon"></i>
+                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra điều lệnh CA tỉnh</h4>
+                                                                                                                                                    </a>
+                                                                                                                                                </li>
+                                                                                                                                                <%   } %>
+                                                                                                                                                    <% if(allRole.indexOf('xem-tinh-huong-gia-dinh') !== -1){%>
+                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                            <a href="/congtacdieulenh/quantri/tinhhuong">
+                                                                                                                                                                <i class="fas fa-skull-crossbones menu-item-icon"></i>
+                                                                                                                                                                <h4 class="menu-item-title">Quản trị tình huống giả định</h4>
+                                                                                                                                                            </a>
+                                                                                                                                                        </li>
+                                                                                                                                                        <%   } %>
+                                                                                                                                                            <% if(allRole.indexOf('xem-kiem-tra-tinh-huong-gia-dinh') !== -1){%>
+                                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                                    <a href="/congtacdieulenh/quantri/kiemtra/tinhhuong">
+                                                                                                                                                                        <i class="fas fa-user-secret menu-item-icon"></i>
+                                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra tình huống giả định</h4>
+                                                                                                                                                                    </a>
+                                                                                                                                                                </li>
+                                                                                                                                                                <%   } %>
+                                                                                                                                                                    <% if(allRole.indexOf('xem-kiem-tra-quan-su-vo-thuat') !== -1){%>
+                                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                                            <a href="/congtacdieulenh/quantri/kiemtra/dieulenhquansu">
+                                                                                                                                                                                <i class="fas fa-fan menu-item-icon"></i>
+                                                                                                                                                                                <h4 class="menu-item-title">Kiểm tra điều lệnh, võ thuật</h4>
+                                                                                                                                                                            </a>
+                                                                                                                                                                        </li>
+                                                                                                                                                                        <%   } %>
+                                                                                                                                                                            <% if(allRole.indexOf('xem-kiem-tra-the-luc') !== -1){%>
+                                                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                                                    <a href="/congtacdieulenh/quantri/kiemtra/theluc">
+                                                                                                                                                                                        <i class="fas fa-swimmer menu-item-icon"></i>
+                                                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra thể lực</h4>
+                                                                                                                                                                                    </a>
+                                                                                                                                                                                </li>
+                                                                                                                                                                                <%   } %>
+                                                                                                                                                                                    <% if(allRole.indexOf('xem-kiem-tra-ban-sung') !== -1){%>
+                                                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                                                            <a href="/congtacdieulenh/quantri/kiemtra/bansung">
+                                                                                                                                                                                                <i class="fas fa-map-signs menu-item-icon"></i>
+                                                                                                                                                                                                <h4 class="menu-item-title">Kiểm tra bắn đạn thật</h4>
+                                                                                                                                                                                            </a>
+                                                                                                                                                                                        </li>
+                                                                                                                                                                                        <%   } %>
+                </ul>
+            </div>
+            <div class="col-xl-10" id="chuyenmuc">
+                <div id="tieudetrang" class="animate__animated animate__fadeInUp">
+                    <h3 class="tieudetrang">Quản trị các lần tổ chức kiểm tra điều lệnh của Đội điều lệnh Công an tỉnh</h3>
+                </div>
+                <div class="col-xl-12 animate__animated animate__fadeIn" id="main">
+                    <div class="col-xl-12" id="quantri-detail">
+                        <!-- bảng khen thưởng phòng -->
+                        <%if(allRole.indexOf('them-ket-qua-kiem-tra-px03') !== -1){%>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddCuocthi" data-bs-backdrop='static'><i class="fas fa-plus" style="margin-right: 5px"></i>Thêm mới</button>
+                            <%}%>
+                                <table id="tableGiaithethao" style="width:100%" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">STT</th>
+                                            <th style="text-align: center;">Thời gian kiểm tra</th>
+                                            <th style="text-align: center;">Đơn vị</th>
+                                            <th style="text-align: center;">Kết quả phát hiện</th>
+                                            <th style="text-align: center;">Nội dung chấn chỉnh, xử lý</th>
+                                            <th style="text-align: center;">Tệp</th>
+                                            <th style="text-align: center;"></th>
+                                            <th style="text-align: center;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Toast  Thêm  thành công-->
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 1111">
+                <div id="add-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <!-- <img src="" class="rounded me-2" alt="..."> -->
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Thêm mới thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <!-- Toast  Edit  thành công-->
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 1111">
+                <div id="edit-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <!-- <img src="" class="rounded me-2" alt="..."> -->
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Cập nhật thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <!-- Toast  Edit  thành công-->
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 1111">
+                <div id="delete-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <!-- <img src="" class="rounded me-2" alt="..."> -->
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Xóa thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <span id='variableJSON' hidden>
+                <%= JSON.stringify(allRole); %>
+            </span>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="/javascripts/congtacdieulenh/dieulenhpx03.js"></script>
+    <script src="/javascripts/logout.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<nav id="nav__header">
+    <div class="nav__header-left">
+        <i class="fas fa-bars nav__header-left-icon"></i>
+        <!-- Menu Left to Right  -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <!-- <h5 class="offcanvas-title" id="offcanvasExampleLabel">Admin</h5> -->
+                <i class="fas fa-bars nav__header-left-icon" class="btn-close text-reset" data-bs-dismiss="offcanvas"></i>
+            </div>
+            <div class="offcanvas-body">
+                <ul id="main-menu">
+                    <a href="">
+                        <li class="main-menu-item">
+                            <i class="fas fa-file-word main-menu-item-sym" class=""></i>
+                            <p class="main-menu-item-title">Hệ thống văn bản quy định, chỉ đạo của Bộ Công an, các đơn vị trực thuộc Bộ, Công an tỉnh liên quan đến các mặt công tác chính trị trong Công an tỉnh</p>
+                        </li>
+                    </a>
+                    <a href="">
+                        <li class="main-menu-item">
+                            <i class="fas fa-file-word main-menu-item-sym"></i>
+                            <span class="main-menu-item-title">Công tác quản lí, theo dõi, thống kê và báo cáo thi đua, khen thưởng trong Công an tỉnh hằng tháng, hằng năm</span>
+                        </li>
+                    </a>
+                    <a href="">
+                        <li class="main-menu-item">
+                            <i class="fas fa-file-word main-menu-item-sym"></i>
+                            <span class="main-menu-item-title">Công tác điều lệnh</span>
+                        </li>
+                    </a>
+                    <a href="">
+                        <li class="main-menu-item">
+                            <i class="fas fa-file-word main-menu-item-sym"></i>
+                            <span class="main-menu-item-title">Văn nghệ, thể thao</span>
+                        </li>
+                    </a>
+                    <a href="">
+                        <li class="main-menu-item">
+                            <i class="fas fa-share-square main-menu-item-sym"></i>
+                            <span class="main-menu-item-title">Công tác tuyên truyền</span>
+                        </li>
+                    </a>
+                    <a href="">
+                        <li class="main-menu-item">
+                            <i class="fas fa-share-square" class="main-menu-item-sym"></i>
+                            <span class="main-menu-item-title">Đăng xuất</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <!-- End Menu Left to Right  -->
+        <img src="http://congan.hungyen.gov.vn/images/footer-logo.png" alt="" id="logo-img">
+    </div>
+    <div class="nav__header-right">
+        <%if(allRole.indexOf('them-phong') !== -1){%>
+            <p class="addVB" data-bs-toggle="modal" data-bs-target="#modalAddChuyenmuc" data-bs-backdrop='static'>
+                <i class="fas fa-pen"></i> Thêm mới
+            </p>
+            <%}%>
+                <i class="fas fa-user admin"></i>
+                <span class="admin-name"><%=user%></span>
+                <div class="change-pass">
+                    <i class="fas fa-cogs" id="change-pass"></i>
+                    <span class="change-pass-title">Đăng xuất</span>
+                </div>
+    </div>
+</nav>

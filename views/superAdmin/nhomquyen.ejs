@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Quản trị hệ thống
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css' />
+    <link rel='stylesheet' href='/stylesheets/components/navbar/style.css' />
+    <link rel='stylesheet' href='/stylesheets/quantrihethong/style.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <%-include('../admin/component/nav_chitietphong')%>
+        </div>
+        <div class="row">
+            <div class="modal fade" id="modalRedirect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị chi tiết đơn vị cấp phòng, huyện, thị xã, thành phố</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="redirectForm" class="row g-3">
+                                    <div class="col-xl-12">
+                                        <label for="ten" class="form-label">Chọn đơn vị muốn quản trị chi tiết tập thể đơn vị hoặc cá nhân: </label>
+                                        <select id="donvi" class="form-select">
+                                             <option value="" hidden disabled selected>-- Chọn mục này --</option>
+                                             <% if(list.length > 0){
+                                                  list.forEach(i=>{ %>
+                                                       <option value="<%=i._id%>"><%=i.ten%></option>
+                                               <%   })
+                                             } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="redirect" class="btn btn-primary add" disabled type="submit">Đi tới trang</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal edit cuộc thi -->
+            <div class="modal fade" id="modalAddCuocthi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="max-width: 1200px">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới tài khoản và phân quyền tài khoản</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="cuocthiForm" class="row g-3">
+                                    <div class="col-xl-12" id="quantri-phanquyen">
+                                        <h3 class="phanquyen-head">Thêm mới nhóm quyền</h3>
+                                        <div class="col-xl-12">
+                                            <label style="color: black;font-weight: normal;" for="tennhomquyen" class="form-label">Tên nhóm quyền: (*)</label>
+                                            <input type="text" name="tennhomquyen" class="form-control" id="tennhomquyen" required>
+                                        </div>
+                                        <div class="col-xl-12">
+                                            <label style="color: black;font-weight: normal;" for="mota" class="form-label">Mô tả: </label>
+                                            <input type="text" name="mota" class="form-control" id="mota">
+                                        </div>
+
+                                        <div id="phanquyen-action" class="col-xl-12">
+                                            <h4 class="phanquyen-action-head">Phân quyền</h4>
+                                            <div class="checkTotal">
+                                                <label for="checkTotal" style="color: black;font-weight: normal;">Chọn tất cả các quyền</label>
+                                                <input type="checkbox" id="checkTotal" name="checkTotal">
+                                            </div>
+                                            <ul class="phanquyen-action-list row">
+                                                <li class=" col-xl-3 phanquyen-action-item">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý người dùng</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-danh-sach-nguoi-dung" value="xem-danh-sach-nguoi-dung">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-nguoi-dung" value="them-nguoi-dung">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-nguoi-dung" value="sua-nguoi-dung">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-nguoi-dung" value="xoa-nguoi-dung">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class=" col-xl-3 phanquyen-action-item">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý phân quyền</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-danh-sach-phan-quyen" value="xem-danh-sach-phan-quyen">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-phan-quyen" value="them-phan-quyen">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-phan-quyen" value="sua-phan-quyen">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-phan-quyen" value="xoa-phan-quyen">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class=" col-xl-3 phanquyen-action-item">
+                                                    <h5 class="phanquyen-action-item-title">Hệ thống Văn bản</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-danh-sach-van-ban" value="xem-danh-sach-van-ban">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-van-ban" value="them-van-ban">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-van-ban" value="sua-van-ban">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-van-ban" value="xoa-van-ban">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý tên đội</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-danh-sach-doi" value="xem-danh-sach-doi">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-doi" value="them-doi">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-doi" value="sua-doi">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-doi" value="xoa-doi">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý khen thưởng đội</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-khen-thuong-doi" value="xem-khen-thuong-doi">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-khen-thuong-doi" value="them-khen-thuong-doi">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-khen-thuong-doi" value="sua-khen-thuong-doi">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-khen-thuong-doi" value="xoa-khen-thuong-doi">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý tên phòng</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-danh-sach-phong" value="xem-danh-sach-phong">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-phong" value="them-phong">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-phong" value="sua-phong">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-phong" value="xoa-phong">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý khen thưởng phòng</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-khen-thuong-phong" value="xem-khen-thuong-phong">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-khen-thuong-phong" value="them-khen-thuong-phong">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-khen-thuong-phong" value="sua-khen-thuong-phong">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-khen-thuong-phong" value="xoa-khen-thuong-phong">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý thi đua phòng</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-thi-dua-phong" value="xem-thi-dua-phong">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-thi-dua-phong" value="them-thi-dua-phong">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-thi-dua-phong" value="sua-thi-dua-phong">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-thi-dua-phong" value="xoa-thi-dua-phong">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý cán bộ, chiến sĩ</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-danh-sach-can-bo" value="xem-danh-sach-can-bo">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-can-bo" value="them-can-bo">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-can-bo" value="sua-can-bo">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="luan-chuyen-can-bo" value="luan-chuyen-can-bo">
+                                                            <span>Chuyển</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-can-bo" value="xoa-can-bo">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý thi đua tháng</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-thi-dua-thang" value="xem-thi-dua-thang">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-thi-dua-thang" value="them-thi-dua-thang">
+                                                            <span>Cập nhật</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-thi-dua-thang" value="sua-thi-dua-thang">
+                                                            <span>Sửa ghi chú</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý thi đua năm</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-thi-dua-nam" value="xem-thi-dua-nam">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-thi-dua-nam" value="them-thi-dua-nam">
+                                                            <span>Cập nhật</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-ghi-chu-thi-dua-nam" value="sua-ghi-chu-thi-dua-nam">
+                                                            <span>Sửa ghi chú</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý xếp loại đảng viên </h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-xep-loai-dang-vien" value="xem-xep-loai-dang-vien">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-xep-loai-dang-vien" value="them-xep-loai-dang-vien">
+                                                            <span>Cập nhật</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-ghi-chu-xep-loai-dang-vien" value="sua-ghi-chu-xep-loai-dang-vien">
+                                                            <span>Sửa ghi chú</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Khen thưởng cá nhân</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-khen-thuong-ca-nhan" value="xem-khen-thuong-ca-nhan">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-khen-thuong-ca-nhan" value="them-khen-thuong-ca-nhan">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-khen-thuong-ca-nhan" value="sua-khen-thuong-ca-nhan">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-khen-thuong-ca-nhan" value="xoa-khen-thuong-ca-nhan">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý kỉ luật cá nhân</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-ki-luat-ca-nhan" value="xem-ki-luat-ca-nhan">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-ki-luat-ca-nhan" value="them-ki-luat-ca-nhan">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-ki-luat-ca-nhan" value="sua-ki-luat-ca-nhan">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-ki-luat-ca-nhan" value="xoa-ki-luat-ca-nhan">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý chuyên mục</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-chuyen-muc" value="xem-chuyen-muc">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-chuyen-muc" value="them-chuyen-muc">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-chuyen-muc" value="sua-chuyen-muc">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-chuyen-muc" value="xoa-chuyen-muc">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý mục tin</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-muc-tin" value="xem-muc-tin">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-muc-tin" value="them-muc-tin">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-muc-tin" value="sua-muc-tin">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-muc-tin" value="xoa-muc-tin">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý tin bài</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-tin-bai" value="xem-tin-bai">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-tin-bai" value="them-tin-bai">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-tin-bai" value="sua-tin-bai">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-tin-bai" value="xoa-tin-bai">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý thi tuyên truyền</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-cuoc-thi-tuyen-truyen" value="xem-cuoc-thi-tuyen-truyen">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-cuoc-thi-tuyen-truyen" value="them-cuoc-thi-tuyen-truyen">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-cuoc-thi-tuyen-truyen" value="sua-cuoc-thi-tuyen-truyen">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-cuoc-thi-tuyen-truyen" value="xoa-cuoc-thi-tuyen-truyen">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">VHVN - TDTT tiêu biểu</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-hoat-dong-tieu-bieu" value="xem-hoat-dong-tieu-bieu">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-hoat-dong-tieu-bieu" value="them-hoat-dong-tieu-bieu">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-hoat-dong-tieu-bieu" value="sua-hoat-dong-tieu-bieu">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-hoat-dong-tieu-bieu" value="xoa-hoat-dong-tieu-bieu">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý mô hình VHVN -TDTT</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-mo-hinh" value="xem-mo-hinh">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-mo-hinh" value="them-mo-hinh">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-mo-hinh" value="sua-mo-hinh">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-mo-hinh" value="xoa-mo-hinh">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý kết quả thể thao</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-ket-qua-the-thao" value="xem-ket-qua-the-thao">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-ket-qua-the-thao" value="them-ket-qua-the-thao">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-ket-qua-the-thao" value="sua-ket-qua-the-thao">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-ket-qua-the-thao" value="xoa-ket-qua-the-thao">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý môn thể thao</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-mon-the-thao" value="xem-mon-the-thao">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-mon-the-thao" value="them-mon-the-thao">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-mon-the-thao" value="sua-mon-the-thao">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-mon-the-thao" value="xoa-mon-the-thao">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý cá nhân thể thao</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-ca-nhan-the-thao-dien-hinh" value="xem-ca-nhan-the-thao-dien-hinh">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-ca-nhan-the-thao-dien-hinh" value="them-ca-nhan-the-thao-dien-hinh">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-ca-nhan-the-thao-dien-hinh" value="xoa-ca-nhan-the-thao-dien-hinh">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý kết quả văn nghệ</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-ket-qua-van-nghe" value="xem-ket-qua-van-nghe">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-ket-qua-van-nghe" value="them-ket-qua-van-nghe">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-ket-qua-van-nghe" value="sua-ket-qua-van-nghe">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-ket-qua-van-nghe" value="xoa-ket-qua-van-nghe">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý thể loại văn nghệ</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-the-loai-van-nghe" value="xem-the-loai-van-nghe">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-the-loai-van-nghe" value="them-the-loai-van-nghe">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-the-loai-van-nghe" value="sua-the-loai-van-nghe">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-the-loai-van-nghe" value="xoa-the-loai-van-nghe">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý cá nhân văn nghệ</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-ca-nhan-van-nghe-dien-hinh" value="xem-ca-nhan-van-nghe-dien-hinh">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-ca-nhan-van-nghe-dien-hinh" value="them-ca-nhan-van-nghe-dien-hinh">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-ca-nhan-van-nghe-dien-hinh" value="xoa-ca-nhan-van-nghe-dien-hinh">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">đội điều lệnh Công an tỉnh</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-ket-qua-kiem-tra-px03" value="xem-ket-qua-kiem-tra-px03">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-ket-qua-kiem-tra-px03" value="them-ket-qua-kiem-tra-px03">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-ket-qua-kiem-tra-px03" value="sua-ket-qua-kiem-tra-px03">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-ket-qua-kiem-tra-px03" value="xoa-ket-qua-kiem-tra-px03">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý tình huống giả định</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-tinh-huong-gia-dinh" value="xem-tinh-huong-gia-dinh">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-tinh-huong-gia-dinh" value="them-tinh-huong-gia-dinh">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-tinh-huong-gia-dinh" value="sua-tinh-huong-gia-dinh">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-tinh-huong-gia-dinh" value="xoa-tinh-huong-gia-dinh">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Kiểm tra tình huống giả định</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-kiem-tra-tinh-huong-gia-dinh" value="xem-kiem-tra-tinh-huong-gia-dinh">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-kiem-tra-tinh-huong-gia-dinh" value="them-kiem-tra-tinh-huong-gia-dinh">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-kiem-tra-tinh-huong-gia-dinh" value="sua-kiem-tra-tinh-huong-gia-dinh">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-kiem-tra-tinh-huong-gia-dinh" value="xoa-kiem-tra-tinh-huong-gia-dinh">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý kết quả kiểm tra quân sự - võ thuật</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-kiem-tra-quan-su-vo-thuat" value="xem-kiem-tra-quan-su-vo-thuat">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-kiem-tra-quan-su-vo-thuat" value="them-kiem-tra-quan-su-vo-thuat">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-kiem-tra-quan-su-vo-thuat" value="sua-kiem-tra-quan-su-vo-thuat">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-kiem-tra-quan-su-vo-thuat" value="xoa-kiem-tra-quan-su-vo-thuat">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý kết quả kiểm tra thể lực</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-kiem-tra-the-luc" value="xem-kiem-tra-the-luc">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-kiem-tra-the-luc" value="them-kiem-tra-the-luc">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-kiem-tra-the-luc" value="sua-kiem-tra-the-luc">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-kiem-tra-the-luc" value="xoa-kiem-tra-the-luc">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý kết quả kiểm tra bắn súng</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-kiem-tra-ban-sung" value="xem-kiem-tra-ban-sung">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-kiem-tra-ban-sung" value="them-kiem-tra-ban-sung">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="sua-kiem-tra-ban-sung" value="sua-kiem-tra-ban-sung">
+                                                            <span>Sửa</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-kiem-tra-ban-sung" value="xoa-kiem-tra-ban-sung">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="phanquyen-action-item col-xl-3">
+                                                    <h5 class="phanquyen-action-item-title">Quản lý danh sách không đạt kiểm tra điều lệnh</h5>
+                                                    <label>Chọn tất cả</label>
+                                                    <input type="checkbox" name="checkFullItem">
+                                                    <ul class="quyenList">
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xem-danh-sach-khong-dat" value="xem-danh-sach-khong-dat">
+                                                            <span>Xem</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="them-danh-sach-khong-dat" value="them-danh-sach-khong-dat">
+                                                            <span>Thêm</span>
+                                                        </li>
+                                                        <li>
+                                                            <input class="item-role" type="checkbox" name="xoa-danh-sach-khong-dat" value="xoa-danh-sach-khong-dat">
+                                                            <span>Xóa</span>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modalEditCuocthi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="max-width: 1200px;">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa phân quyền</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditCuocthiForm" class="row g-3">
+                                    <div class="col-xl-12">
+                                        <label for="tennhomquyen_Edit" class="form-label">Tên nhóm quyền: (*)</label>
+                                        <input type="text" name="tennhomquyen_Edit" class="form-control" id="tennhomquyen_Edit" required>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <label for="mota_Edit" class="form-label">Mô tả: </label>
+                                        <input type="text" name="mota_Edit" class="form-control" id="mota_Edit">
+                                    </div>
+
+                                    <div id="phanquyen-action" class="col-xl-12">
+                                        <h4 class="phanquyen-action-head">Phân quyền</h4>
+                                        <div class="checkTotal_Edit">
+                                            <label>Chọn tất cả các quyền</label>
+                                            <input type="checkbox" name="checkTotal_Edit">
+                                        </div>
+                                        <ul class="phanquyen-action-list row">
+                                            <li class=" col-xl-3 phanquyen-action-item">
+                                                <h5 class="phanquyen-action-item-title">Quản lý người dùng</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-danh-sach-nguoi-dung-edit" value="xem-danh-sach-nguoi-dung">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-nguoi-dung-edit" value="them-nguoi-dung">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-nguoi-dung-edit" value="sua-nguoi-dung">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-nguoi-dung-edit" value="xoa-nguoi-dung">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class=" col-xl-3 phanquyen-action-item">
+                                                <h5 class="phanquyen-action-item-title">Quản lý phân quyền</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-danh-sach-phan-quyen-edit" value="xem-danh-sach-phan-quyen">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-phan-quyen-edit" value="them-phan-quyen">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-phan-quyen-edit" value="sua-phan-quyen">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-phan-quyen-edit" value="xoa-phan-quyen">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class=" col-xl-3 phanquyen-action-item">
+                                                <h5 class="phanquyen-action-item-title">Hệ thống Văn bản</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-danh-sach-van-ban-edit" value="xem-danh-sach-van-ban">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-van-ban-edit" value="them-van-ban">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-van-ban-edit" value="sua-van-ban">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-van-ban-edit" value="xoa-van-ban">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý tên đội</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-danh-sach-doi-edit" value="xem-danh-sach-doi">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-doi-edit" value="them-doi">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-doi-edit" value="sua-doi">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-doi-edit" value="xoa-doi">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý khen thưởng đội</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-khen-thuong-doi-edit" value="xem-khen-thuong-doi">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-khen-thuong-doi-edit" value="them-khen-thuong-doi">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-khen-thuong-doi-edit" value="sua-khen-thuong-doi">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-khen-thuong-doi-edit" value="xoa-khen-thuong-doi">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý tên phòng</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-danh-sach-phong-edit" value="xem-danh-sach-phong">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-phong-edit" value="them-phong">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-phong-edit" value="sua-phong">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-phong-edit" value="xoa-phong">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý khen thưởng phòng</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-khen-thuong-phong-edit" value="xem-khen-thuong-phong">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-khen-thuong-phong-edit" value="them-khen-thuong-phong">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-khen-thuong-phong-edit" value="sua-khen-thuong-phong">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-khen-thuong-phong-edit" value="xoa-khen-thuong-phong">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý thi đua phòng</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-thi-dua-phong-edit" value="xem-thi-dua-phong">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-thi-dua-phong-edit" value="them-thi-dua-phong">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-thi-dua-phong-edit" value="sua-thi-dua-phong">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-thi-dua-phong-edit" value="xoa-thi-dua-phong">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý cán bộ, chiến sĩ</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-danh-sach-can-bo-edit" value="xem-danh-sach-can-bo">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-can-bo-edit" value="them-can-bo">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-can-bo-edit" value="sua-can-bo">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="luan-chuyen-can-bo-edit" value="luan-chuyen-can-bo">
+                                                        <span>Chuyển</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-can-bo-edit" value="xoa-can-bo">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý thi đua tháng</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-thi-dua-thang-edit" value="xem-thi-dua-thang">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-thi-dua-thang-edit" value="them-thi-dua-thang">
+                                                        <span>Cập nhật</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-thi-dua-thang-edit" value="sua-thi-dua-thang">
+                                                        <span>Sửa ghi chú</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý thi đua năm</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-thi-dua-nam-edit" value="xem-thi-dua-nam">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-thi-dua-nam-edit" value="them-thi-dua-nam">
+                                                        <span>Cập nhật</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-ghi-chu-thi-dua-nam-edit" value="sua-ghi-chu-thi-dua-nam">
+                                                        <span>Sửa ghi chú</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý xếp loại đảng viên </h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-xep-loai-dang-vien-edit" value="xem-xep-loai-dang-vien">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-xep-loai-dang-vien-edit" value="them-xep-loai-dang-vien">
+                                                        <span>Cập nhật</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-ghi-chu-xep-loai-dang-vien-edit" value="sua-ghi-chu-xep-loai-dang-vien">
+                                                        <span>Sửa ghi chú</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Khen thưởng cá nhân</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-khen-thuong-ca-nhan-edit" value="xem-khen-thuong-ca-nhan">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-khen-thuong-ca-nhan-edit" value="them-khen-thuong-ca-nhan">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-khen-thuong-ca-nhan-edit" value="sua-khen-thuong-ca-nhan">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-khen-thuong-ca-nhan-edit" value="xoa-khen-thuong-ca-nhan">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý kỉ luật cá nhân</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-ki-luat-ca-nhan-edit" value="xem-ki-luat-ca-nhan">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-ki-luat-ca-nhan-edit" value="them-ki-luat-ca-nhan">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-ki-luat-ca-nhan-edit" value="sua-ki-luat-ca-nhan">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-ki-luat-ca-nhan-edit" value="xoa-ki-luat-ca-nhan">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý chuyên mục</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-chuyen-muc-edit" value="xem-chuyen-muc">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-chuyen-muc-edit" value="them-chuyen-muc">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-chuyen-muc-edit" value="sua-chuyen-muc">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-chuyen-muc-edit" value="xoa-chuyen-muc">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý mục tin</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-muc-tin-edit" value="xem-muc-tin">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-muc-tin-edit" value="them-muc-tin">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-muc-tin-edit" value="sua-muc-tin">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-muc-tin-edit" value="xoa-muc-tin">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý tin bài</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-tin-bai-edit" value="xem-tin-bai">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-tin-bai-edit" value="them-tin-bai">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-tin-bai-edit" value="sua-tin-bai">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-tin-bai-edit" value="xoa-tin-bai">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý thi tuyên truyền</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-cuoc-thi-tuyen-truyen-edit" value="xem-cuoc-thi-tuyen-truyen">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-cuoc-thi-tuyen-truyen-edit" value="them-cuoc-thi-tuyen-truyen">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-cuoc-thi-tuyen-truyen-edit" value="sua-cuoc-thi-tuyen-truyen">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-cuoc-thi-tuyen-truyen-edit" value="xoa-cuoc-thi-tuyen-truyen">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">VHVN - TDTT tiêu biểu</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-hoat-dong-tieu-bieu-edit" value="xem-hoat-dong-tieu-bieu">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-hoat-dong-tieu-bieu-edit" value="them-hoat-dong-tieu-bieu">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-hoat-dong-tieu-bieu-edit" value="sua-hoat-dong-tieu-bieu">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-hoat-dong-tieu-bieu-edit" value="xoa-hoat-dong-tieu-bieu">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý mô hình VHVN -TDTT</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-mo-hinh-edit" value="xem-mo-hinh">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-mo-hinh-edit" value="them-mo-hinh">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-mo-hinh-edit" value="sua-mo-hinh">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-mo-hinh-edit" value="xoa-mo-hinh">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý kết quả thể thao</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-ket-qua-the-thao-edit" value="xem-ket-qua-the-thao">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-ket-qua-the-thao-edit" value="them-ket-qua-the-thao">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-ket-qua-the-thao-edit" value="sua-ket-qua-the-thao">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-ket-qua-the-thao-edit" value="xoa-ket-qua-the-thao">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý môn thể thao</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-mon-the-thao-edit" value="xem-mon-the-thao">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-mon-the-thao-edit" value="them-mon-the-thao">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-mon-the-thao-edit" value="sua-mon-the-thao">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-mon-the-thao-edit" value="xoa-mon-the-thao">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý cá nhân thể thao</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-ca-nhan-the-thao-dien-hinh-edit" value="xem-ca-nhan-the-thao-dien-hinh">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-ca-nhan-the-thao-dien-hinh-edit" value="them-ca-nhan-the-thao-dien-hinh">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-ca-nhan-the-thao-dien-hinh-edit" value="xoa-ca-nhan-the-thao-dien-hinh">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý kết quả văn nghệ</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-ket-qua-van-nghe-edit" value="xem-ket-qua-van-nghe">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-ket-qua-van-nghe-edit" value="them-ket-qua-van-nghe">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-ket-qua-van-nghe-edit" value="sua-ket-qua-van-nghe">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-ket-qua-van-nghe-edit" value="xoa-ket-qua-van-nghe">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý thể loại văn nghệ</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-the-loai-van-nghe-edit" value="xem-the-loai-van-nghe">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-the-loai-van-nghe-edit" value="them-the-loai-van-nghe">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-the-loai-van-nghe-edit" value="sua-the-loai-van-nghe">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-the-loai-van-nghe-edit" value="xoa-the-loai-van-nghe">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý cá nhân văn nghệ</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-ca-nhan-van-nghe-dien-hinh-edit" value="xem-ca-nhan-van-nghe-dien-hinh">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-ca-nhan-van-nghe-dien-hinh-edit" value="them-ca-nhan-van-nghe-dien-hinh">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-ca-nhan-van-nghe-dien-hinh-edit" value="xoa-ca-nhan-van-nghe-dien-hinh">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">đội điều lệnh Công an tỉnh</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-ket-qua-kiem-tra-px03-edit" value="xem-ket-qua-kiem-tra-px03">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-ket-qua-kiem-tra-px03-edit" value="them-ket-qua-kiem-tra-px03">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-ket-qua-kiem-tra-px03-edit" value="sua-ket-qua-kiem-tra-px03">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-ket-qua-kiem-tra-px03-edit" value="xoa-ket-qua-kiem-tra-px03">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý tình huống giả định</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-tinh-huong-gia-dinh-edit" value="xem-tinh-huong-gia-dinh">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-tinh-huong-gia-dinh-edit" value="them-tinh-huong-gia-dinh">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-tinh-huong-gia-dinh-edit" value="sua-tinh-huong-gia-dinh">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-tinh-huong-gia-dinh-edit" value="xoa-tinh-huong-gia-dinh">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Kiểm tra tình huống giả định</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-kiem-tra-tinh-huong-gia-dinh-edit" value="xem-kiem-tra-tinh-huong-gia-dinh">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-kiem-tra-tinh-huong-gia-dinh-edit" value="them-kiem-tra-tinh-huong-gia-dinh">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-kiem-tra-tinh-huong-gia-dinh-edit" value="sua-kiem-tra-tinh-huong-gia-dinh">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-kiem-tra-tinh-huong-gia-dinh-edit" value="xoa-kiem-tra-tinh-huong-gia-dinh">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý kết quả kiểm tra quân sự - võ thuật</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-kiem-tra-quan-su-vo-thuat-edit" value="xem-kiem-tra-quan-su-vo-thuat">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-kiem-tra-quan-su-vo-thuat-edit" value="them-kiem-tra-quan-su-vo-thuat">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-kiem-tra-quan-su-vo-thuat-edit" value="sua-kiem-tra-quan-su-vo-thuat">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-kiem-tra-quan-su-vo-thuat-edit" value="xoa-kiem-tra-quan-su-vo-thuat">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý kết quả kiểm tra thể lực</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-kiem-tra-the-luc-edit" value="xem-kiem-tra-the-luc">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-kiem-tra-the-luc-edit" value="them-kiem-tra-the-luc">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-kiem-tra-the-luc-edit" value="sua-kiem-tra-the-luc">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-kiem-tra-the-luc-edit" value="xoa-kiem-tra-the-luc">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý kết quả kiểm tra bắn súng</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-kiem-tra-ban-sung-edit" value="xem-kiem-tra-ban-sung">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-kiem-tra-ban-sung-edit" value="them-kiem-tra-ban-sung">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="sua-kiem-tra-ban-sung-edit" value="sua-kiem-tra-ban-sung">
+                                                        <span>Sửa</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-kiem-tra-ban-sung-edit" value="xoa-kiem-tra-ban-sung">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="phanquyen-action-item col-xl-3">
+                                                <h5 class="phanquyen-action-item-title">Quản lý danh sách không đạt kiểm tra điều lệnh</h5>
+                                                <label>Chọn tất cả</label>
+                                                <input type="checkbox" name="checkFullItem_Edit">
+                                                <ul class="quyenList">
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xem-danh-sach-khong-dat-edit" value="xem-danh-sach-khong-dat">
+                                                        <span>Xem</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="them-danh-sach-khong-dat-edit" value="them-danh-sach-khong-dat">
+                                                        <span>Thêm</span>
+                                                    </li>
+                                                    <li>
+                                                        <input class="item-role_Edit" type="checkbox" name="xoa-danh-sach-khong-dat-edit" value="xoa-danh-sach-khong-dat">
+                                                        <span>Xóa</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit cuộc thi  -->
+            <!-- menu-left  -->
+            <div class="col-xl-2" id="menu-chuyenmuc">
+                <ul class="menu-admin">
+                    <% if(allRole.indexOf('xem-danh-sach-phan-quyen') !== -1){ %>
+                        <li class="menu-admin-item active">
+                            <a href="/quantrihethong/nhomquyen">
+                                <i class="fas fa-project-diagram menu-item-icon"></i>
+                                <h4 class="menu-item-title">Quản trị nhóm quyền</h4>
+                            </a>
+                        </li>
+                        <%  } %>
+                            <% if(allRole.indexOf('xem-danh-sach-nguoi-dung') !== -1){ %>
+                                <li class="menu-admin-item">
+                                    <a href="/quantrihethong/quantritaikhoan">
+                                        <i class="fas fa-user-shield menu-item-icon"></i>
+                                        <h4 class="menu-item-title">Quản trị tài khoản</h4>
+                                    </a>
+                                </li>
+                                <%  } %>
+                                    <% if(allRole.indexOf('xem-danh-sach-phong') !== -1){ %>
+                                        <li class="menu-admin-item">
+                                            <a href="/admin/quantriphong">
+                                                <i class="fab fa-microsoft menu-item-icon"></i>
+                                                <h4 class="menu-item-title">Quản trị tên phòng, huyện</h4>
+                                            </a>
+                                        </li>
+                                        <%  } %>
+                                            <% if(allRole.indexOf('xem-khen-thuong-phong') !== -1
+                            || allRole.indexOf('xem-thi-dua-phong') !== -1 || allRole.indexOf('xem-danh-sach-doi') !== -1
+                            || allRole.indexOf('xem-khen-thuong-doi') !== -1 || allRole.indexOf('xem-danh-sach-can-bo') !== -1
+                            || allRole.indexOf('xem-thi-dua-thang') !== -1 || allRole.indexOf('xem-thi-dua-nam') !== -1
+                            || allRole.indexOf('xem-xep-loai-dang-vien') !== -1 || allRole.indexOf('xem-ki-luat-ca-nhan') !== -1
+                            || allRole.indexOf('xem-khen-thuong-ca-nhan') !== -1
+                             ){ %>
+                                                <li class="menu-admin-item">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalRedirect" data-bs-backdrop='static'>
+                                                        <i class="fas fa-house-user menu-item-icon"></i>
+                                                        <h4 class="menu-item-title">Quản trị chi tiết đơn vị</h4>
+                                                    </a>
+                                                </li>
+                                                <%  } %>
+                                                    <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                        <li class="menu-admin-item">
+                                                            <a href="/loaivanban">
+                                                                <i class="fas fa-scroll menu-item-icon"></i>
+                                                                <h4 class="menu-item-title">Quản trị loại văn bản</h4>
+                                                            </a>
+                                                        </li>
+                                                        <%   } %>
+                                                            <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                                <li class="menu-admin-item">
+                                                                    <a href="/quantrivanban">
+                                                                        <i class="fas fa-scroll menu-item-icon"></i>
+                                                                        <h4 class="menu-item-title">Quản trị văn bản</h4>
+                                                                    </a>
+                                                                </li>
+                                                                <%   } %>
+                                                                    <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                                        <li class="menu-admin-item">
+                                                                            <a href="/coquanbanhanh">
+                                                                                <i class="fas fa-scroll menu-item-icon"></i>
+                                                                                <h4 class="menu-item-title">Quản trị CQBH văn bản</h4>
+                                                                            </a>
+                                                                        </li>
+                                                                        <%   } %>
+                                                                            <% if(allRole.indexOf('xem-hoat-dong-tieu-bieu') !== -1){%>
+                                                                                <li class="menu-admin-item">
+                                                                                    <a href="/vannghethethao/quantri/hoatdongtieubieu">
+                                                                                        <i class="fas fa-running menu-item-icon"></i>
+                                                                                        <h4 class="menu-item-title">Hoạt động VN - TT tiêu biểu</h4>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <%   } %>
+                                                                                    <% if(allRole.indexOf('xem-mo-hinh') !== -1){%>
+                                                                                        <li class="menu-admin-item">
+                                                                                            <a href="/vannghethethao/quantri/mohinhtieubieu">
+                                                                                                <i class="fab fa-studiovinari menu-item-icon"></i>
+                                                                                                <h4 class="menu-item-title">Mô hình VHVN - TT nổi bật</h4>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <%   } %>
+                                                                                            <% if(allRole.indexOf('xem-ket-qua-the-thao') !== -1
+                                                                            || allRole.indexOf('xem-mon-the-thao') !== -1
+                                                                             || allRole.indexOf('xem-ca-nhan-the-thao-dien-hinh') !== -1
+                                                                            ){%>
+                                                                                                <li class="menu-admin-item">
+                                                                                                    <a href="/vannghethethao/quantri/thethao">
+                                                                                                        <i class="fas fa-biking menu-item-icon"></i>
+                                                                                                        <h4 class="menu-item-title">Quản trị thể thao</h4>
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                                <%   } %>
+                                                                                                    <% if(allRole.indexOf('xem-ket-qua-van-nghe') !== -1
+                                                                            || allRole.indexOf('xem-the-loai-van-nghe') !== -1
+                                                                             || allRole.indexOf('xem-ca-nhan-van-nghe-dien-hinh') !== -1
+                                                                            ){%>
+                                                                                                        <li class="menu-admin-item">
+                                                                                                            <a href="/vannghethethao/quantri/vannghe">
+                                                                                                                <i class="fas fa-music menu-item-icon"></i>
+                                                                                                                <h4 class="menu-item-title">Quản trị văn hóa văn nghệ</h4>
+                                                                                                            </a>
+                                                                                                        </li>
+                                                                                                        <%   } %>
+                                                                                                            <% if(allRole.indexOf('xem-chuyen-muc') !== -1){%>
+                                                                                                                <li class="menu-admin-item">
+                                                                                                                    <a href="/tuyentruyen/quantri/chuyenmuc">
+                                                                                                                        <i class="fab fa-apple menu-item-icon"></i>
+                                                                                                                        <h4 class="menu-item-title">Quản trị chuyên mục</h4>
+                                                                                                                    </a>
+                                                                                                                </li>
+                                                                                                                <%   } %>
+                                                                                                                    <% if(allRole.indexOf('xem-muc-tin') !== -1){%>
+                                                                                                                        <li class="menu-admin-item">
+                                                                                                                            <a href="/tuyentruyen/quantri/muctin">
+                                                                                                                                <i class="fab fa-edge menu-item-icon"></i>
+                                                                                                                                <h4 class="menu-item-title">Quản trị mục tin</h4>
+                                                                                                                            </a>
+                                                                                                                        </li>
+                                                                                                                        <%   } %>
+                                                                                                                            <% if(allRole.indexOf('xem-tin-bai') !== -1){%>
+                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                    <a href="/tuyentruyen/quantri/tinbai">
+                                                                                                                                        <i class="fas fa-fan menu-item-icon"></i>
+                                                                                                                                        <h4 class="menu-item-title">Quản trị tin bài</h4>
+                                                                                                                                    </a>
+                                                                                                                                </li>
+                                                                                                                                <%   } %>
+                                                                                                                                    <% if(allRole.indexOf('xem-cuoc-thi-tuyen-truyen') !== -1){%>
+                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                            <a href="/tuyentruyen/quantri/ketquathi">
+                                                                                                                                                <i class="fab fa-modx menu-item-icon"></i>
+                                                                                                                                                <h4 class="menu-item-title">Quản trị thi tuyên truyền</h4>
+                                                                                                                                            </a>
+                                                                                                                                        </li>
+                                                                                                                                        <%   } %>
+                                                                                                                                            <% if(allRole.indexOf('xem-ket-qua-kiem-tra-px03') !== -1){%>
+                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                    <a href="/congtacdieulenh/quantri">
+                                                                                                                                                        <i class="fab fa-shirtsinbulk menu-item-icon"></i>
+                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra điều lệnh CA tỉnh</h4>
+                                                                                                                                                    </a>
+                                                                                                                                                </li>
+                                                                                                                                                <%   } %>
+                                                                                                                                                    <% if(allRole.indexOf('xem-tinh-huong-gia-dinh') !== -1){%>
+                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                            <a href="/congtacdieulenh/quantri/tinhhuong">
+                                                                                                                                                                <i class="fas fa-skull-crossbones menu-item-icon"></i>
+                                                                                                                                                                <h4 class="menu-item-title">Quản trị tình huống giả định</h4>
+                                                                                                                                                            </a>
+                                                                                                                                                        </li>
+                                                                                                                                                        <%   } %>
+                                                                                                                                                            <% if(allRole.indexOf('xem-kiem-tra-tinh-huong-gia-dinh') !== -1){%>
+                                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                                    <a href="/congtacdieulenh/quantri/kiemtra/tinhhuong">
+                                                                                                                                                                        <i class="fas fa-user-secret menu-item-icon"></i>
+                                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra tình huống giả định</h4>
+                                                                                                                                                                    </a>
+                                                                                                                                                                </li>
+                                                                                                                                                                <%   } %>
+                                                                                                                                                                    <% if(allRole.indexOf('xem-kiem-tra-quan-su-vo-thuat') !== -1){%>
+                                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                                            <a href="/congtacdieulenh/quantri/kiemtra/dieulenhquansu">
+                                                                                                                                                                                <i class="fas fa-fan menu-item-icon"></i>
+                                                                                                                                                                                <h4 class="menu-item-title">Kiểm tra điều lệnh, võ thuật</h4>
+                                                                                                                                                                            </a>
+                                                                                                                                                                        </li>
+                                                                                                                                                                        <%   } %>
+                                                                                                                                                                            <% if(allRole.indexOf('xem-kiem-tra-the-luc') !== -1){%>
+                                                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                                                    <a href="/congtacdieulenh/quantri/kiemtra/theluc">
+                                                                                                                                                                                        <i class="fas fa-swimmer menu-item-icon"></i>
+                                                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra thể lực</h4>
+                                                                                                                                                                                    </a>
+                                                                                                                                                                                </li>
+                                                                                                                                                                                <%   } %>
+                                                                                                                                                                                    <% if(allRole.indexOf('xem-kiem-tra-ban-sung') !== -1){%>
+                                                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                                                            <a href="/congtacdieulenh/quantri/kiemtra/bansung">
+                                                                                                                                                                                                <i class="fas fa-map-signs menu-item-icon"></i>
+                                                                                                                                                                                                <h4 class="menu-item-title">Kiểm tra bắn đạn thật</h4>
+                                                                                                                                                                                            </a>
+                                                                                                                                                                                        </li>
+                                                                                                                                                                                        <%   } %>
+                </ul>
+            </div>
+            <div class="col-xl-10" id="chuyenmuc">
+                <div class="col-xl-12 animate__animated animate__fadeIn" id="main">
+                    <div class="col-xl-12 " id="quantri-detail">
+                        <h4 class="quantri-detail-head" style="margin-top: 20px;">Quản trị danh sách nhóm quyền</h4>
+                        <% if(allRole.indexOf('them-phan-quyen') !== -1){%>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddCuocthi" data-bs-backdrop="static"><i class="fas fa-user-shield" style="margin-right: 5px"></i>Thêm mới nhóm quyền</button>
+                            <% }%>
+                                <table id="tableGiaithethao" style="width:100% " class="table table-bordered table-striped ">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center; ">STT</th>
+                                            <th style="text-align: center; ">Tên nhóm quyền</th>
+                                            <th style="text-align: center; ">Mô tả</th>
+                                            <th style="text-align: center; "></th>
+                                            <th style="text-align: center; "></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Toast  Thêm  thành công-->
+            <div class="position-fixed top-0 end-0 p-3 " style="z-index: 111111">
+                <div id="add-toast" class="toast hide " role="alert " aria-live="assertive " aria-atomic="true ">
+                    <div class="toast-header text-white bg-primary ">
+                        <!-- <img src=" " class="rounded me-2 " alt="... "> -->
+                        <strong class="me-auto ">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button " class="btn-close " data-bs-dismiss="toast " aria-label="Close "></button>
+                    </div>
+                    <div class="toast-body ">
+                        Thêm mới thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <!-- Toast  Edit  thành công-->
+            <div class="position-fixed top-0 end-0 p-3 " style="z-index: 111111">
+                <div id="edit-toast" class="toast hide " role="alert " aria-live="assertive " aria-atomic="true ">
+                    <div class="toast-header text-white bg-primary ">
+                        <!-- <img src=" " class="rounded me-2 " alt="... "> -->
+                        <strong class="me-auto ">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button " class="btn-close " data-bs-dismiss="toast " aria-label="Close "></button>
+                    </div>
+                    <div class="toast-body ">
+                        Cập nhật thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <!-- Toast  Edit  thành công-->
+            <div class="position-fixed top-0 end-0 p-3 " style="z-index: 111111">
+                <div id="delete-toast" class="toast hide " role="alert " aria-live="assertive " aria-atomic="true ">
+                    <div class="toast-header text-white bg-primary ">
+                        <!-- <img src=" " class="rounded me-2 " alt="... "> -->
+                        <strong class="me-auto ">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button " class="btn-close " data-bs-dismiss="toast " aria-label="Close "></button>
+                    </div>
+                    <div class="toast-body">
+                        Xóa thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <span id='variableJSON' hidden>
+                <%= JSON.stringify(allRole); %>
+            </span>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript " src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js ">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js "></script>
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js "></script>
+    <script type="text/javascript " language="javascript " src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js "></script>
+    <script type="text/javascript " src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js "></script>
+    <script src="/javascripts/quantrihethong/phanquyen.js" type="text/javascript"></script>
+    <script src="/javascripts/logout.js" type="text/javascript"></script>
+</body>
+
+</html>

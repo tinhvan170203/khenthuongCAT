@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Kết quả giải thi đấu thể thao
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/congcu/bootstrap5.min.css" rel="stylesheet">
+    <script src="/congcu/bootstrap5.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link rel='stylesheet' href='/stylesheets/home.css' />
+    <link rel='stylesheet' href='/stylesheets/responsive/trangchu.css' />
+    <link rel='stylesheet' href='/congcu/dataTable.1.10.25.min.css' />
+    <link rel="stylesheet" href="/congcu/animate.4.1.1.min.css" />
+</head>
+<style>
+    table thead {
+        background: #ffeacf;
+    }
+    
+    .anhdautrang {
+        margin: 12px auto;
+        position: relative;
+        height: 450px;
+        background-image: url('https://wall.vn/wp-content/uploads/2019/11/hinh-nen-bong-da-dep-11-1536x960.jpg');
+        background-size: cover;
+        background-attachment: attachment;
+        background-repeat: no-repeat;
+        background-position: center;
+        box-shadow: 1px 1px 2px #666
+    }
+    
+    .overlay-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #444;
+        opacity: 0.4;
+        width: 100%;
+        transition: all 1s;
+    }
+    
+    .anhdautrang:hover .img-text {
+        opacity: 1
+    }
+    
+    .anhdautrang:hover .overlay-img {
+        opacity: 0;
+    }
+    
+    .img {
+        width: 100%;
+    }
+    
+    .img-text {
+        position: absolute;
+        bottom: 0;
+        background: #d0d0d080;
+        width: 100%;
+        font-weight: bold;
+        padding: 12px;
+        color: black;
+        opacity: 0.2;
+        transition: all 1s;
+        left: 0
+    }
+</style>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="loading">
+                <div class="over-lay"></div>
+                <div class="loading-gif"></div>
+                <p class="loading-text">Đang tải dữ liệu từ server...</p>
+            </div>
+            <%-include('./common/search.ejs')%>
+                <!-- navbar menu  -->
+                <nav id="menu" class="col-xl-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul id="menu-list">
+                        <li class="sub-menu">
+                            <a href="/pm/thiduakhenthuong/thiduathang">
+                                <i class="fas fa-home sub-menu-icon"></i>
+                                <h5 class="sub-menu-title">Trang chủ</h5>
+                            </a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/pm/thiduakhenthuong/hethongvanban">
+                                <i class="fas fa-journal-whills sub-menu-icon"></i>
+                                <h5 class="sub-menu-title">Hệ thống văn bản</h5>
+                            </a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="#">
+                                <i class="fab fa-font-awesome-flag sub-menu-icon"></i>
+                                <h5 class="sub-menu-title">Thi đua, khen thưởng</h5>
+                            </a>
+                            <ul class="sub-menu-khenthuong">
+                                <%phongList.forEach(function(i){ %>
+                                    <li class="sub-menu-khenthuong-item">
+                                        <a href="/pm/thiduakhenthuong/phong/<%=i._id%>/thiduathang">
+                                            <%=i.kyhieu%>
+                                        </a>
+                                    </li>
+                                    <%  })%>
+                            </ul>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="#">
+                                <i class="fab fa-edge sub-menu-icon"></i>
+                                <h5 class="sub-menu-title">Công tác tuyên truyền</h5>
+                            </a>
+                            <ul class="sub-menu-list">
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/congtactuyentruyen/tinbaiphongsu"> Tin bài, phóng sự đã đăng tải</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/congtactuyentruyen/cuocthi"> Kết quả các cuộc thi tuyên truyền</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sub-menu active">
+                            <a href="#">
+                                <i class="fas fa-music sub-menu-icon"></i>
+                                <h5 class="sub-menu-title">Văn nghệ - Thể thao</h5>
+                            </a>
+                            <ul class="sub-menu-list">
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/vannghe/cuocthi">Hội thi, hội diễn văn hóa, văn nghệ</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/vannghe/danhsachdienhinh">Nhân tố có năng khiếu văn nghệ</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a class="sub-active" href="/pm/thiduakhenthuong/thethao/cuocthi">Giải thi đấu thể dục, thể thao</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/thethao/danhsachdienhinh">Nhân tố thể thao điển hình</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="#">
+                                <i class="fab fa-shirtsinbulk sub-menu-icon"></i>
+                                <h5 class="sub-menu-title">Điều lệnh - Quân sự - Võ thuật</h5>
+                            </a>
+                            <ul class="sub-menu-list">
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/congtacdieulenh/doidieulenhcatinh">Kiểm tra điều lệnh của đội Điều lệnh CAT</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtratinhhuong">Kiểm tra tình huống của Đội Điều lệnh CAT</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtradieulenh-quansu"> Kiểm tra Điều lệnh - Quân sự - Võ thuật</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtratheluc"> Kiểm tra thể lực, chiến sĩ khỏe</a>
+                                </li>
+                                <li class="sub-menu-item">
+                                    <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtrabansung"> Kiểm tra bắn đạn thật</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/quantrihethong/login">
+                                <i class="fas fa-user-shield sub-menu-icon"></i>
+                                <h5 class="sub-menu-title">Đăng nhập</h5>
+                            </a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="#" class="search">
+                                <i class="fas fa-search sub-menu-icon"></i>
+                            </a>
+                            <ul class="search-canbo">
+                                <li class="search-canbo-item">
+                                    <form id="form-search">
+                                        <input type="text" id="search-input" placeholder="Họ tên...">
+                                        <label class="search-canbo-item-label">Cấp bậc: </label>
+                                        <select id="search-capbac">
+                                            <option value="all" selected>-- Tất cả --</option>
+                                            <option value="Trung sĩ">Trung sĩ</option>
+                                            <option value="Thượng sĩ">Thượng sĩ</option>
+                                            <option value="Thiếu úy">Thiếu úy</option>
+                                            <option value="Trung úy">Trung úy</option>
+                                            <option value="Thượng úy">Thượng úy</option>
+                                            <option value="Đại úy">Đại úy</option>
+                                            <option value="Thiếu tá">Thiếu tá</option>
+                                            <option value="Trung tá">Trung tá</option>
+                                            <option value="Thượng tá">Thượng tá</option>
+                                            <option value="Đại tá">Đại tá</option>
+                                            <option value="Thiếu tướng">Thiếu tướng</option>
+                                        </select>
+                                        <label class="search-canbo-item-label">Đơn vị công tác: </label>
+                                        <select name="" id="search-donvi">
+                                    <option value="all" selected>-- Tất cả --</option>
+                                    <%phongList.forEach(function(i){ %>
+                                        <option value="<%=i._id%>"><%=i.kyhieu%></option>
+                                  <%  })%>
+                                </select>
+                                        <button type="submit" id="timkiem"></i> Tra cứu</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <i class="far fa-window-close close-search"></i>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- end navbar menu  -->
+
+                <!-- sub navbar menu  -->
+                <nav id="nav__header">
+                    <!-- góc trái  -->
+                    <div class="nav__header-left">
+                        <i class="fas fa-bars nav__header-left-icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
+                        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                            <div class="offcanvas-header">
+                                <i class="fas fa-bars nav__header-left-icon" class="btn-close text-reset" data-bs-dismiss="offcanvas"></i>
+                            </div>
+                            <div class="offcanvas-body">
+                                <ul id="main-menu">
+                                    <li class="main-menu-item">
+                                        <a href="/pm/thiduakhenthuong/thiduathang">
+                                            <p class="main-menu-item-title">Trang chủ</p>
+                                        </a>
+                                    </li>
+                                    <li class="main-menu-item">
+                                        <a href="/pm/thiduakhenthuong/hethongvanban">
+                                            <p class="main-menu-item-title">Hệ thống Văn bản</p>
+                                        </a>
+                                    </li>
+                                    <li class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Thi đua, khen thưởng
+                                            </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <ul class="accordion-body">
+                                                    <%phongList.forEach(function(i){ %>
+                                                        <li>
+                                                            <a href="/pm/thiduakhenthuong/phong/<%=i._id%>/thiduathang">
+                                                                <%=i.kyhieu%>
+                                                            </a>
+                                                        </li>
+                                                        <%  })%>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="accordion" id="accordion2">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading2">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+                                            Công tác tuyên truyền
+                                            </button>
+                                            </h2>
+                                            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordion2">
+                                                <ul class="accordion-body">
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtactuyentruyen/tinbaiphongsu">
+                                                        Tin bài, phóng sự đã đăng tải
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtactuyentruyen/cuocthi">
+                                                        Kết quả các cuộc thi tuyên truyền
+                                                    </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="accordion" id="accordion4">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading4">
+                                                <button class="accordion-button  active" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="true" aria-controls="collapse4">
+                                           Văn nghệ - Thể thao
+                                            </button>
+                                            </h2>
+                                            <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordion4">
+                                                <ul class="accordion-body">
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/vannghe/cuocthi">
+                                                         Hội thi, hội diễn văn hóa, văn nghệ
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/vannghe/danhsachdienhinh">
+                                                        Nhân tố có năng khiếu văn nghệ
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="sub-active" href="/pm/thiduakhenthuong/thethao/cuocthi">
+                                                        Giải thi đấu thể dục thể thao
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/thethao/danhsachdienhinh">
+                                                        Nhân tố thể thao điển hình
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtrabansung">
+                                                        Kiểm tra bắn đạn thật
+                                                    </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="accordion" id="accordion5">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading5">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="true" aria-controls="collapse5">
+                                            Công tác điều lệnh
+                                            </button>
+                                            </h2>
+                                            <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#accordion5">
+                                                <ul class="accordion-body">
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtacdieulenh/doidieulenhcatinh">
+                                                        Kiểm tra điều lệnh của đội Điều lệnh CAT
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtratinhhuong">
+                                                        Kiểm tra tình huống của Đội điều lệnh Công an tỉnh
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtradieulenh-quansu">
+                                                        Kiểm tra Điều lệnh - Quân sự - Võ thuật
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtratheluc">
+                                                        Kiểm tra thể lực, chiến sĩ khỏe
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pm/thiduakhenthuong/congtacdieulenh/kiemtrabansung">
+                                                        Kiểm tra bắn đạn thật
+                                                    </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <img src="http://congan.hungyen.gov.vn/images/footer-logo.png" alt="" id="logo-img">
+                    </div>
+                    <!-- end góc trái  -->
+
+                    <!-- góc phải  -->
+                    <ul class="mobile-right-list">
+                        <li class="sub-menu">
+                            <a href="#" class='search'>
+                                <i class="fas fa-search sub-menu-icon"></i>
+                                <span class="sub-menu-title">Tìm kiếm</span>
+                            </a>
+                            <ul class="search-canbo">
+                                <li class="search-canbo-item">
+                                    <form id="form-search1">
+                                        <input type="text" id="search-input1" placeholder="Họ tên...">
+                                        <label class="search-canbo-item-label">Cấp bậc: </label>
+                                        <select id="search-capbac1">
+                                    <option value="all" selected>-- Tất cả --</option>
+                                    <option value="Trung sĩ">Trung sĩ</option>
+                                    <option value="Thượng sĩ">Thượng sĩ</option>
+                                    <option value="Thiếu úy">Thiếu úy</option>
+                                    <option value="Trung úy">Trung úy</option>
+                                    <option value="Thượng úy">Thượng úy</option>
+                                    <option value="Đại úy">Đại úy</option>
+                                    <option value="Thiếu tá">Thiếu tá</option>
+                                    <option value="Trung tá">Trung tá</option>
+                                    <option value="Thượng tá">Thượng tá</option>
+                                    <option value="Đại tá">Đại tá</option>
+                                    <option value="Thiếu tướng">Thiếu tướng</option>
+                                </select>
+                                        <label class="search-canbo-item-label">Đơn vị công tác: </label>
+                                        <select name="" id="search-donvi1">
+                                    <option value="all" selected>-- Tất cả --</option>
+                                    <%phongList.forEach(function(i){ %>
+                                        <option value="<%=i._id%>"><%=i.kyhieu%></option>
+                                  <%  })%>
+                                </select>
+                                        <button type="submit" id="timkiem1"></i> Tra cứu</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <i class="far fa-window-close close-search"></i>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/quantrihethong/login">
+                                <span class="sub-menu-title">Đăng nhập</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- end góc phải  -->
+                </nav>
+                <!-- end sub navbar  -->
+        </div>
+        <div class="row" id="content">
+            <div class="col-xl-11 anhdautrang">
+                <div class="overlay-img"></div>
+                <p class="img-text">Thể dục thể thao ....</p>
+            </div>
+
+            <div class="col-xl-8 search-component" style="display: none;">
+                <form class="search-list" id="form-filter">
+                    <div class="search-item">
+                        <div class="search-item-label">Tên cuộc thi, giải đấu: </div>
+                        <input type="text" class="search-item-input" id="search-ten">
+                    </div>
+                    <div class="search-item">
+                        <div class="search-item-label">Địa điểm tổ chức: </div>
+                        <input type="text" class="search-item-input" id="search-diadiemtochuc">
+                    </div>
+                    <div class="search-item">
+                        <div class="search-item-label">Đầu mối tổ chức: </div>
+                        <input type="text" class="search-item-input" id="search-captochuc">
+                    </div>
+                    <div class="search-item">
+                        <div class="search-item-label">Kết quả đạt được: </div>
+                        <input type="text" class="search-item-input" id="search-ketqua">
+                    </div>
+                    <div class="search-item">
+                        <div class="search-item-label">Từ ngày: </div>
+                        <input type="date" max="<%=max%>" value='<%=min%>' class="search-item-input" id="search-ngay-start">
+                    </div>
+                    <div class="search-item">
+                        <div class="search-item-label">Đến ngày: </div>
+                        <input type="date" value='<%=max%>' max="<%=max%>" class="search-item-input" id="search-ngay-end">
+                    </div>
+                    <div class="search-item">
+                        <button type="submit" class="btn-search-nam"><i class="fas fa-search"></i> Tìm kiếm</button>
+                    </div>
+                    <i class="fas fa-times" id='close-form'></i>
+                </form>
+            </div>
+            <div class="col-xl-12" style="margin-top: 24px">
+                <h4 class="bang-title" style="margin-top: 24px">Thống kê cuộc thi, giải thi đấu thể thao từ ngày <span id="ngay-from"></span> đến ngày <span id="ngay-to"></span></h4>
+                <div style="display: flex;justify-content:flex-end">
+                    <button id="open-form"><i class="fas fa-search-plus"></i> Tìm kiếm nâng cao</button>
+                </div>
+
+                <h3 class="total-search">Tổng số: <span id="total"></span> bản ghi.</h3>
+                <table style="margin-top: 36px" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên cuộc thi, giải thi đấu</th>
+                            <th>Ngày tổ chức</th>
+                            <th>Địa điểm tổ chức</th>
+                            <th>Đầu mối tổ chức</th>
+                            <th>Giải thưởng đạt được</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bang2">
+
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example" id="pagination2">
+                </nav>
+            </div>
+        </div>
+        <div class="row footer">
+            <%-include('./common/footer')%>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/home/cuocthithethao.js"></script>
+    <script src="/javascripts/home/search.js"></script>
+
+</body>
+
+</html>

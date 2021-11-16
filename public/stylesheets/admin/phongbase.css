@@ -1,0 +1,388 @@
+        .menu-admin {
+            margin: 0;
+            padding: 0 0 100px 0;
+            list-style-type: none;
+        }
+        
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        #chuyenmuc {
+            background: #f5f5f5;
+        }
+        
+        #main {
+            margin-bottom: 20px;
+            border: 1px solid #fff;
+            background: white;
+            box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        }
+        
+        .menu-admin-item {
+            padding: 12px 10px 12px 12px;
+            border-bottom: 1px solid white;
+            background: rgb(0 116 148);
+        }
+        
+        .menu-admin-item:first-child {
+            border-top: 1px solid white;
+        }
+        
+        .menu-admin-item:hover {
+            cursor: pointer;
+            opacity: 0.6;
+        }
+        
+        .menu-admin-item a {
+            text-decoration: none;
+        }
+        
+        .menu-item-title {
+            font-size: 13px;
+            color: white;
+        }
+        
+        #main {
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .sorting_1 {
+            text-align: center;
+        }
+        
+        .dataTables_wrapper.no-footer .dataTables_scrollBody {
+            border-bottom: 1px solid #111;
+        }
+        
+        .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+            overflow-x: hidden!important
+        }
+        /* Chi tiết phòng  */
+        
+        .main-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 12px 12px;
+            text-transform: uppercase;
+        }
+        
+        #quantri-list {
+            height: 32px;
+            display: flex;
+            margin-top: 10px;
+            justify-content: space-around;
+            border-bottom: 1px solid rgb(68, 67, 67);
+            list-style-type: none;
+            font: bold 11px Tahoma, Geneva, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+        }
+        
+        .quantri-item {
+            padding: 8px 18px;
+            border-top: 1px solid rgb(68, 67, 67);
+            border-right: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            background: rgb(231 231 231);
+            font-weight: bold;
+            color: black;
+            margin-left: 10px;
+        }
+        
+        .quantri-item>a {
+            text-decoration: none;
+            color: black;
+        }
+        
+        .active {
+            opacity: 0.6
+        }
+        
+        .active>a,
+        .active1>a {
+            color: rgb(204, 0, 0);
+        }
+        
+        #quantri-detail,
+        #quantri-detail-canhan {
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        .quantri-detail-head,
+        #quantri-detail-canhan {
+            text-align: center;
+            font-size: 17px;
+            color: #069;
+            font-weight: bold;
+        }
+        
+        table>thead {
+            font-size: 13px;
+            background-image: linear-gradient( 110deg, #0bcc74 0%, #43c064 30%, #009efd 100%);
+        }
+        
+        table>thead>tr>th {
+            vertical-align: middle;
+        }
+        
+        .dtrg-level-0>td {
+            background: #f1fd00;
+            color: black;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        #tableKhenthuongPhong_wrapper,
+        #tableVianninh_wrapper,
+        #tableQuantriDoi_wrapper,
+        #tableKhenthuongDoi_wrapper,
+        #tableKhenthuongCanhan_wrapper,
+        #tableKiluatCanhan_wrapper,
+        #tableQuantriCanhan {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        .btn {
+            font-size: 12px;
+        }
+        
+        #quantri-detail-canhan>button,
+        #quantri-detail>button {
+            float: right;
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+        
+        #imgPreview,
+        #imgPreviewEdit {
+            height: 200px;
+            width: 150px;
+            background: #ccc;
+            border: 1px solid #333;
+        }
+        
+        .quantri-tab-select {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-right: 10px;
+            margin-bottom: 12px;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .quantri-tab-select>select {
+            font-size: 12px;
+            outline: none;
+            margin: 0 4px;
+            padding: 2px;
+            border: 1px rgb(154, 154, 154);
+            border-style: dotted
+        }
+        
+        .quantri-tab-select>label {
+            font-weight: bold;
+        }
+        
+        select {
+            outline: none
+        }
+        
+        .clickDoi {
+            position: absolute;
+            top: -46px;
+            left: 67%;
+            font-size: 13px;
+            color: black;
+            animation: moveTop 1s cubic-bezier(0.47, 0.88, 1, 1) 0s 1 normal;
+        }
+        
+        @keyframes moveTop {
+            from {
+                opacity: 0;
+                transform: translateY(-10px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+        
+        .clickDoi::before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 20px;
+            left: 45%;
+            top: 16px;
+            height: 20px;
+            background-size: cover;
+            transform: rotate( 175deg);
+            background-image: url(https://tse2.mm.bing.net/th?id=OIP.QjSPu1LnqMJorbAAikn_ZQHaF7&pid=Api&P=0&w=192&h=155);
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+            background: aliceblue;
+            opacity: 0.8;
+        }
+        
+        .overlay-title {
+            font-size: 18px;
+            color: #f55b05;
+            font-family: revert;
+        }
+        
+        .checkdangvien {
+            font-size: 12px;
+            color: #333!important
+        }
+        
+        #dangkidangvien,
+        #dangkithidua,
+        #xeploainam,
+        #xeplaoithang,
+        #xeploaidangvien {
+            font-size: 12px;
+        }
+        
+        .person-detail {
+            text-align: left;
+            margin-left: 20px;
+            font-size: 14px;
+            color: #3d3b3b;
+            font-weight: 400;
+            animation: rightToLeft 0.4s ease 0s 1 normal;
+        }
+        
+        @keyframes rightToLeft {
+            from {
+                opacity: 0;
+                color: #009efd;
+                transform: translateX(50%)
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+        
+        #nav__header {
+            position: fixed;
+            z-index: 2;
+            border-bottom: 1px solid white;
+        }
+        
+        #menu-chuyenmuc {
+            position: fixed;
+            margin-top: 57px;
+            height: 100vh
+        }
+        
+        #chuyenmuc {
+            margin-top: 57px;
+            position: absolute;
+            right: 0
+        }
+        
+        .menu-admin-item>a {
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item-icon {
+            color: white;
+            font-size: 18px;
+            margin-right: 8px;
+            margin-left: 8px;
+            width: 20px
+        }
+        /* Responsive  / */
+        
+        @media (max-width:1200px) {
+            #menu-chuyenmuc {
+                position: relative;
+                height: auto
+            }
+            #chuyenmuc {
+                position: relative;
+                margin-top: 0px;
+            }
+        }
+        
+        @media (min-width: 720px) and (max-width:960px) {
+            #quantri-list {
+                height: 36px
+            }
+            .quantri-item {
+                height: 36px;
+                font-size: 12px
+            }
+            .main-title {
+                font-size: 14px
+            }
+            .quantri-detail-head,
+            #quantri-detail-canhan {
+                font-size: 14px;
+            }
+            table>thead {
+                font-size: 12px
+            }
+            table>tbody>tr>td {
+                font-size: 12px
+            }
+        }
+        
+        @media(max-width: 720px) {
+            #quantri-list {
+                height: 42px
+            }
+            .main-title {
+                font-size: 12px
+            }
+            .quantri-detail-head,
+            #quantri-detail-canhan {
+                font-size: 13px;
+            }
+            .quantri-item {
+                height: 42px;
+                font-size: 11px
+            }
+            table>thead {
+                font-size: 11px
+            }
+            table>tbody>tr>td {
+                font-size: 11px
+            }
+            .person-profile {
+                font-size: 12px
+            }
+            #quantri-detail-canhan>button,
+            #quantri-detail>button {
+                font-size: 11px
+            }
+            .quantri-item {
+                height: 56px;
+                margin: 6px;
+                width: 37%;
+            }
+            #quantri-list {
+                flex-wrap: wrap;
+                height: auto
+            }
+        }
+        
+        .dataTables_wrapper {
+            overflow-x: scroll;
+        }

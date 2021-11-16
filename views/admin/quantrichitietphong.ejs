@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Admin quản trị chi tiết phòng nghiệp vụ, công an huyện, thị, thành phố
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css' />
+    <link rel='stylesheet' href='/stylesheets/components/navbar/style.css' />
+    <link rel='stylesheet' href='/stylesheets/admin/phongbase.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+<style>
+    #search {
+        padding: 3px 12px;
+        border-radius: 4px;
+        outline: none;
+        border: none;
+        margin-right: 10px;
+    }
+</style>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <%-include('./component/nav_chitietphong.ejs')%>
+        </div>
+        <div class="row">
+            <div class="modal fade" id="modalRedirect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Quản trị chi tiết đơn vị cấp phòng, huyện, thị xã, thành phố</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="cuocthiForm" class="row g-3">
+                                    <div class="col-xl-12">
+                                        <label for="ten" class="form-label">Chọn đơn vị muốn quản trị chi tiết tập thể đơn vị hoặc cá nhân: </label>
+                                        <select id="donvi" class="form-select">
+                                             <option value="" hidden disabled selected>-- Chọn mục này --</option>
+                                             <% if(list.length > 0){
+                                                  list.forEach(i=>{ %>
+                                                       <option value="<%=i._id%>"><%=i.ten%></option>
+                                               <%   })
+                                             } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="redirect" class="btn btn-primary add" disabled type="submit">Đi tới trang</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal add khen thưởng phòng, huyện, thị -->
+            <div class="modal fade" id="modalAddKhenthuong" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới khen thưởng
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="khenthuongForm" class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="soQD" class="form-label">Quyết định khen thưởng số: </label>
+                                        <input type="text" name="soQD" class="form-control" id="soQD" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="ngayQD" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD" class="form-control" id="ngayQD" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="hinhthuckhenthuong" class="form-label">Hình thức khen thưởng: </label>
+                                        <select name="hinhthuckhenthuong" class="form-select" id="hinhthuckhenthuong" required>
+                                            <option value="Giấy khen">Giấy khen</option>
+                                            <option value="Bằng khen">Bằng khen</option>
+                                            <option value="Cờ lưu niệm">Cờ lưu niệm</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="capkhenthuong" class="form-label">Cấp khen thưởng: </label>
+                                        <select name="capkhenthuong" class="form-select" id="capkhenthuong" required>
+                                            <option value="Công an tỉnh">Công an tỉnh</option>
+                                            <option value="Bộ Công an">Bộ Công an</option>
+                                            <option value="Trung ương">Trung ương</option>
+                                            <option value="Tỉnh">Tỉnh</option>
+                                            <option value="Huyện">Huyện</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkhenthuong" class="form-label">Nội dung khen thưởng: </label>
+                                        <input type="text" name="noidungkhenthuong" class="form-control" id="noidungkhenthuong" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal  -->
+            <!-- Modal edit khen  phòng, huyện, thị  -->
+            <div class="modal fade" id="modalEditKhenthuongPhong" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa khen thưởng
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditKhenthuongPhongForm" class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="soQD_Edit" class="form-label">Quyết định khen thưởng số: </label>
+                                        <input type="text" name="soQD_Edit" class="form-control" id="soQD_Edit" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="ngayQD_Edit" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD_Edit" class="form-control" id="ngayQD_Edit" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="hinhthuckhenthuong_Edit" class="form-label">Hình thức khen thưởng: </label>
+                                        <select name="hinhthuckhenthuong_Edit" class="form-select" id="hinhthuckhenthuong_Edit" required>
+                                            <option value="Giấy khen">Giấy khen</option>
+                                            <option value="Bằng khen">Bằng khen</option>
+                                            <option value="Cờ lưu niệm">Cờ lưu niệm</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="capkhenthuong_Edit" class="form-label">Cấp khen thưởng: </label>
+                                        <select name="capkhenthuong_Edit" class="form-select" id="capkhenthuong_Edit" required>
+                                            <option value="Công an tỉnh">Công an tỉnh</option>
+                                            <option value="Bộ Công an">Bộ Công an</option>
+                                            <option value="Trung ương">Trung ương</option>
+                                            <option value="Tỉnh">Tỉnh</option>
+                                            <option value="Huyện">Huyện</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkhenthuong_Edit" class="form-label">Nội dung khen thưởng: </label>
+                                        <input type="text" name="noidungkhenthuong_Edit" class="form-control" id="noidungkhenthuong_Edit" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit phòng  -->
+
+            <!-- add Thi đua năm, vì an ninh tổ quốc  -->
+            <div class="modal fade" id="modalAddThidua" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới thi đua năm, phong trào Vì an ninh Tổ quốc
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="thiduaForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="nam" class="form-label">Năm: </label>
+                                        <input type="number" value='<%=year%>' name="nam" class="form-control" id="nam" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="xeploai" class="form-label">Thành tích đạt được: </label>
+                                        <input type="text" name="xeploai" class="form-control" id="xeploai" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="ghichu" class="form-label">Ghi chú: </label>
+                                        <input type="text" name="ghichu" class="form-control" id="ghichu">
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End vì an ninh  -->
+
+            <!-- Edit thi đua năm  -->
+            <div class="modal fade" id="modalEditThiduaPhong" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa thi đua năm, phong trào Vì an ninh Tổ quốc
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="editThiduaForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="nam_Edit" class="form-label">Năm: </label>
+                                        <input type="number" value='<%=year%>' name="nam_Edit" class="form-control" id="nam_Edit" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="xeploai_Edit" class="form-label">Thành tích đạt được: </label>
+                                        <input type="text" name="xeploai_Edit" class="form-control" id="xeploai_Edit" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="ghichu_Edit" class="form-label">Ghi chú: </label>
+                                        <input type="text" name="ghichu_Edit" class="form-control" id="ghichu_Edit">
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End edit thi đua năm  -->
+
+            <!-- Thêm đội, công an xã  -->
+            <div class="modal fade" id="modalAddDoi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới đội nghiệp vụ, công an xã và tương đương cấp đội
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="addDoiForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="ten" class="form-label">Tên đội nghiệp vụ, công an xã và tương đương: </label>
+                                        <input type="text" name="ten" class="form-control" id="ten" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End thêm đội  -->
+
+            <!-- Edit đội, công an xã  -->
+            <div class="modal fade" id="modalEditDoi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa đội nghiệp vụ, công an xã và tương đương cấp đội
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="editDoiForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="ten_Edit" class="form-label">Tên đội nghiệp vụ, công an xã và tương đương: </label>
+                                        <input type="text" name="ten_Edit" class="form-control" id="ten_Edit" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End edit đội  -->
+
+            <!-- Modal add khen thưởng cấp đội-->
+            <div class="modal fade" id="modalAddKhenthuongDoi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới khen thưởng đội nghiệp vụ, công an xã và tương đương</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="khenthuongDoiForm" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="soQD_Doi" class="form-label">Quyết định khen thưởng số: </label>
+                                        <input type="text" name="soQD_Doi" class="form-control" id="soQD_Doi" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ngayQD_Doi" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD_Doi" class="form-control" id="ngayQD_Doi" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="hinhthuckhenthuong_Doi" class="form-label">Hình thức khen thưởng: </label>
+                                        <select name="hinhthuckhenthuong_Doi" class="form-select" id="hinhthuckhenthuong_Doi" required>
+                                            <option value="Giấy khen">Giấy khen</option>
+                                            <option value="Bằng khen">Bằng khen</option>
+                                            <option value="Cờ lưu niệm">Cờ lưu niệm</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="capkhenthuong_Doi" class="form-label">Cấp khen thưởng: </label>
+                                        <select name="capkhenthuong_Doi" class="form-select" id="capkhenthuong_Doi" required>
+                                            <option value="Công an tỉnh">Công an tỉnh</option>
+                                            <option value="Bộ Công an">Bộ Công an</option>
+                                            <option value="Trung ương">Trung ương</option>
+                                            <option value="Tỉnh">Tỉnh</option>
+                                            <option value="Huyện">Huyện</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label for="doi" class="form-label">Đội nghiệp vụ, công an xã được khen thưởng: </label>
+                                        <select name="doi" class="form-select" id="doi" required>
+                                                <!-- List đội được khen thưởng -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkhenthuong_Doi" class="form-label">Nội dung khen thưởng: </label>
+                                        <input type="text" name="noidungkhenthuong_Doi" class="form-control" id="noidungkhenthuong_Doi" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal  thêm khen thưởng đội-->
+            <!-- Modal edit khen thưởng cấp đội-->
+            <div class="modal fade" id="modalEditKhenthuongDoi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa khen thưởng đội nghiệp vụ, công an xã và tương đương</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditKhenthuongDoiForm" class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="soQD_DoiEdit" class="form-label">Quyết định khen thưởng số: </label>
+                                        <input type="text" name="soQD_DoiEdit" class="form-control" id="soQD_DoiEdit" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="ngayQD_DoiEdit" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD_DoiEdit" class="form-control" id="ngayQD_DoiEdit" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="hinhthuckhenthuong_DoiEdit" class="form-label">Hình thức khen thưởng: </label>
+                                        <select name="hinhthuckhenthuong_DoiEdit" class="form-select" id="hinhthuckhenthuong_DoiEdit" required>
+                                            <option value="Giấy khen">Giấy khen</option>
+                                            <option value="Bằng khen">Bằng khen</option>
+                                            <option value="Cờ lưu niệm">Cờ lưu niệm</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="capkhenthuong_DoiEdit" class="form-label">Cấp khen thưởng: </label>
+                                        <select name="capkhenthuong_DoiEdit" class="form-select" id="capkhenthuong_DoiEdit" required>
+                                            <option value="Công an tỉnh">Công an tỉnh</option>
+                                            <option value="Bộ Công an">Bộ Công an</option>
+                                            <option value="Trung ương">Trung ương</option>
+                                            <option value="Tỉnh">Tỉnh</option>
+                                            <option value="Huyện">Huyện</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkhenthuong_DoiEdit" class="form-label">Nội dung khen thưởng: </label>
+                                        <input type="text" name="noidungkhenthuong_DoiEdit" class="form-control" id="noidungkhenthuong_DoiEdit" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit khen thưởng đội-->
+
+            <!-- Thêm cán bộ, chiến sĩ  -->
+            <div class="modal fade" id="modalAddCanbo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới cán bộ, chiến sĩ
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="canboForm" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="hoten" class="form-label">Họ và tên: </label>
+                                        <input type="text" name="hoten" class="form-control" id="hoten" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ngaysinh" class="form-label">Ngày sinh: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngaysinh" class="form-control" id="ngaysinh" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="sohieuCAND" class="form-label">Số hiệu CAND: </label>
+                                        <input type="text" id="sohieuCAND" class="form-control" name="sohieuCAND">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="capbac" class="form-label">Cấp bậc: </label>
+                                        <select name="capbac" class="form-select" id="capbac" required>
+                                            <option value="Binh nhất">Binh nhất</option>
+                                            <option value="Binh nhì">Binh nhì</option>
+                                            <option value="Trung sĩ">Trung sĩ</option>
+                                            <option value="Thượng sĩ">Thượng sĩ</option>
+                                            <option value="Thiếu úy">Thiếu úy</option>
+                                            <option value="Trung úy">Trung úy</option>
+                                            <option value="Thượng úy">Thượng úy</option>
+                                            <option value="Đại úy">Đại úy</option>
+                                            <option value="Thiếu tá">Thiếu tá</option>
+                                            <option value="Trung tấ">Trung tá</option>
+                                            <option value="Thượng tá">Thượng tá</option>
+                                            <option value="Đại tá">Đại tá</option>
+                                            <option value="Thiếu tướng">Thiếu tướng</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="chucvu" class="form-label">Chức vụ: </label>
+                                        <select name="chucvu" class="form-select" id="chucvu" required>
+                                            <option value="Cán bộ">Cán bộ</option>
+                                            <option value="Phó đội trưởng">Phó đội trưởng</option>
+                                            <option value="Đội trưởng">Đội trưởng</option>
+                                            <option value="Phó Công an xã">Phó Công an xã</option>
+                                            <option value="Trưởng Công an xã">Trưởng Công an xã</option>
+                                            <option value="Uỷ viên Ban kiểm tra Đảng ủy Công an tỉnh">Ủy viên Ban kiểm tra Đảng ủy Công an tỉnh</option>
+                                            <option value="Phó Trưởng phòng">Phó Trưởng phòng</option>
+                                            <option value="Trưởng phòng">Trưởng phòng</option>
+                                            <option value="Phó Trưởng Công an huyện, thị xã, thành phố">Phó Trưởng Công an huyện, thị xã, thành phố</option>
+                                            <option value="Trưởng Công an huyện, thị xã, thành phố">Trưởng Công an huyện, thị xã, thành phố</option>
+                                            <option value="Chánh thanh tra Công an tỉnh">Chánh thanh tra Công an tỉnh</option>
+                                            <option value="Phó Chánh thanh tra Công an tỉnh">Phó Chánh thanh tra Công an tỉnh</option>
+                                            <option value="Trưởng Ban kiểm tra Đảng ủy Công an tỉnh">Trưởng Ban kiểm tra Đảng ủy Công an tỉnh</option>
+                                            <option value="Phó Giám đốc Công an tỉnh">Phó Giám đốc Công an tỉnh</option>
+                                            <option value="Giám đốc Công an tỉnh">Giám đốc Công an tỉnh</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="donvicongtac" class="form-label">Đơn vị công tác:</label>
+                                        <select name="donvicongtac" class="form-select" id="donvicongtac" required>
+                                            <option value="'" disabled hidden selected>--- Chọn đội công tác --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="dangvien" class="form-label">Đảng viên Đảng Cộng sản Việt Nam: </label></br>
+                                        <label class="checkdangvien">
+                                            <input type="radio" name="dangvien" value="true" required />
+                                            Có </label ><br />
+                                          <label class="checkdangvien">
+                                            <input type="radio" name="dangvien" value="false" />
+                                           Không</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label for="img" class="form-label">Ảnh chân dung:</label>
+                                        <input type="file" id="img" name="img" onchange="anhPreview()">
+                                        <div>
+                                            <img id="imgPreview" src="/anhCanbo/anhDefault.jpg">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Thêm cán bộ, chiến sĩ  -->
+
+            <!-- Sửa cán bộ, chiến sĩ  -->
+            <div class="modal fade" id="modalEditCanbo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa cán bộ, chiến sĩ
+                                <%=phong.ten%>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="canboEditForm" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="hoten_Edit" class="form-label">Họ và tên: </label>
+                                        <input type="text" name="hoten_Edit" class="form-control" id="hoten_Edit" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ngaysinh_Edit" class="form-label">Ngày sinh: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngaysinh_Edit" class="form-control" id="ngaysinh_Edit" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="sohieuCAND_Edit" class="form-label">Số hiệu CAND: </label>
+                                        <input type="text" id="sohieuCAND_Edit" class="form-control" name="sohieuCAND_Edit">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="capbac_Edit" class="form-label">Cấp bậc: </label>
+                                        <select name="capbac_Edit" class="form-select" id="capbac_Edit" required>
+                                            <option value="Binh nhất">Binh nhất</option>
+                                            <option value="Binh nhì">Binh nhì</option>
+                                            <option value="Trung sĩ">Trung sĩ</option>
+                                            <option value="Thượng sĩ">Thượng sĩ</option>
+                                            <option value="Thiếu úy">Thiếu úy</option>
+                                            <option value="Trung úy">Trung úy</option>
+                                            <option value="Thượng úy">Thượng úy</option>
+                                            <option value="Đại úy">Đại úy</option>
+                                            <option value="Thiếu tá">Thiếu tá</option>
+                                            <option value="Trung tấ">Trung tá</option>
+                                            <option value="Thượng tá">Thượng tá</option>
+                                            <option value="Đại tá">Đại tá</option>
+                                            <option value="Thiếu tướng">Thiếu tướng</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="chucvu_Edit" class="form-label">Chức vụ: </label>
+                                        <select name="chucvu_Edit" class="form-select" id="chucvu_Edit" required>
+                                            <option value="Cán bộ">Cán bộ</option>
+                                            <option value="Phó đội trưởng">Phó đội trưởng</option>
+                                            <option value="Đội trưởng">Đội trưởng</option>
+                                            <option value="Phó Công an xã">Phó Công an xã</option>
+                                            <option value="Trưởng Công an xã">Trưởng Công an xã</option>
+                                            <option value="Uỷ viên Ban kiểm tra Đảng ủy Công an tỉnh">Ủy viên Ban kiểm tra Đảng ủy Công an tỉnh</option>
+                                            <option value="Phó Trưởng phòng">Phó Trưởng phòng</option>
+                                            <option value="Trưởng phòng">Trưởng phòng</option>
+                                            <option value="Phó Trưởng Công an huyện, thị xã, thành phố">Phó Trưởng Công an huyện, thị xã, thành phố</option>
+                                            <option value="Trưởng Công an huyện, thị xã, thành phố">Trưởng Công an huyện, thị xã, thành phố</option>
+                                            <option value="Chánh thanh tra Công an tỉnh">Chánh thanh tra Công an tỉnh</option>
+                                            <option value="Phó Chánh thanh tra Công an tỉnh">Phó Chánh thanh tra Công an tỉnh</option>
+                                            <option value="Trưởng Ban kiểm tra Đảng ủy Công an tỉnh">Trưởng Ban kiểm tra Đảng ủy Công an tỉnh</option>
+                                            <option value="Phó Giám đốc Công an tỉnh">Phó Giám đốc Công an tỉnh</option>
+                                            <option value="Giám đốc Công an tỉnh">Giám đốc Công an tỉnh</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="donvicongtac_Edit" class="form-label">Đơn vị công tác:</label>
+                                        <select name="donvicongtac_Edit" class="form-select" id="donvicongtac_Edit" required>
+                                            <option value="'" disabled hidden selected>--- Chọn đội công tác --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="dangvien_Edit" class="form-label">Đảng viên Đảng Cộng sản Việt Nam: </label></br>
+                                        <label class="checkdangvien">
+                                            <input type="radio" name="dangvien_Edit" value="true" required />
+                                            Có </label ><br />
+                                          <label class="checkdangvien">
+                                            <input type="radio" name="dangvien_Edit" value="false" />
+                                           Không</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label for="img_Edit" class="form-label">Ảnh chân dung:</label>
+                                        <input type="file" id="img_Edit" name="img_Edit" onchange="anhPreviewEdit()">
+                                        <div>
+                                            <img id="imgPreviewEdit">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit">
+                                            <i class="far fa-edit"></i>
+                                            Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Edit cán bộ, chiến sĩ  -->
+
+            <!-- move công tác  -->
+            <div class="modal fade" id="modalMoveCanbo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Luân chuyển công tác cán bộ cho đồng chí <em id="nameMove">Vũ văn TÍnh</em>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="moveCanboForm" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="donvichuyenden" class="form-label">Đơn vị chuyển đến: </label>
+                                        <select name="donvichuyenden" class="form-select" id="donvichuyenden" required>
+                                            <option value="" hidden disabled selected>--- Chọn đơn vị chuyển đến ---</option>
+                                           <% if(list.length > 0){ %>
+                                              <% list.forEach((i)=>{ %>
+                                                        <option  value="<%=i.id%>"><%-i.kyhieu%></option>
+                                                       <%  })
+                                                     } %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label for="doichuyenden" class="form-label">Đội công tác, công an xã và tương đương chuyển đến: </label>
+                                        <select type="text" name="doichuyenden" class="form-select" id="doichuyenden" required>
+                                            <option value="" selected disabled hidden>--- Chưa chọn đơn vị chuyển đến ---</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Hoàn tất thủ tục chuyển công tác</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End move công tác -->
+
+            <!-- Modal ghi chú thi đua tháng -->
+            <div class="modal fade" id="modalGhichu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ghi chú thi đua tháng của cán bộ, chiến sĩ
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="ghichuForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="ghichuthang" class="form-label">Ghi chú: </label>
+                                        <input type="text" name="ghichuthang" class="form-control" id="ghichuthang" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Lưu ghi chú</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End ghi chú thi đua tháng  -->
+
+            <!-- Modal ghi chú thi đua năm -->
+            <div class="modal fade" id="modalGhichunam" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ghi chú thi đua năm của cán bộ, chiến sĩ
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="ghichunamForm" class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="ghichunam" class="form-label">Ghi chú: </label>
+                                        <input type="text" name="ghichunam" class="form-control" id="ghichunam" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary edit" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Lưu ghi chú</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End ghi chú thi đua năm  -->
+            <!-- Modal add khen thưởng cá nhân-->
+            <div class="modal fade" id="modalAddKhenthuongCanhan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới khen thưởng đối với cá nhân
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="khenthuongCanhanForm" class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="soQD_Canhan" class="form-label">Quyết định khen thưởng số: </label>
+                                        <input type="text" name="soQD_Canhan" class="form-control" id="soQD_Canhan" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="ngayQD_Canhan" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD_Canhan" class="form-control" id="ngayQD_Canhan" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="hinhthuckhenthuong_Canhan" class="form-label">Hình thức khen thưởng: </label>
+                                        <select name="hinhthuckhenthuong_Canhan" class="form-select" id="hinhthuckhenthuong_Canhan" required>
+                                            <option value="Giấy khen">Giấy khen</option>
+                                            <option value="Bằng khen">Bằng khen</option>
+                                            <option value="Cờ lưu niệm">Cờ lưu niệm</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="capkhenthuong_Canhan" class="form-label">Cấp khen thưởng: </label>
+                                        <select name="capkhenthuong_Canhan" class="form-select" id="capkhenthuong_Canhan" required>
+                                            <option value="Công an tỉnh">Công an tỉnh</option>
+                                            <option value="Bộ Công an">Bộ Công an</option>
+                                            <option value="Trung ương">Trung ương</option>
+                                            <option value="Tỉnh">Tỉnh</option>
+                                            <option value="Huyện">Huyện</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkhenthuong_Canhan" class="form-label">Nội dung khen thưởng: </label>
+                                        <input type="text" name="noidungkhenthuong_Canhan" class="form-control" id="noidungkhenthuong_Canhan" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal add khen thưởng cá nhân -->
+            <!-- Modal edit khen thưởng cá nhân-->
+            <div class="modal fade" id="modalEditKhenthuongCanhan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa khen thưởng đối với cá nhân
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditKhenthuongCanhanForm" class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="soQD_CanhanEdit" class="form-label">Quyết định khen thưởng số: </label>
+                                        <input type="text" name="soQD_CanhanEdit" class="form-control" id="soQD_CanhanEdit" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="ngayQD_CanhanEdit" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD_CanhanEdit" class="form-control" id="ngayQD_CanhanEdit" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="hinhthuckhenthuong_CanhanEdit" class="form-label">Hình thức khen thưởng: </label>
+                                        <select name="hinhthuckhenthuong_CanhanEdit" class="form-select" id="hinhthuckhenthuong_CanhanEdit" required>
+                                            <option value="Giấy khen">Giấy khen</option>
+                                            <option value="Bằng khen">Bằng khen</option>
+                                            <option value="Cờ lưu niệm">Cờ lưu niệm</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="capkhenthuong_CanhanEdit" class="form-label">Cấp khen thưởng: </label>
+                                        <select name="capkhenthuong_CanhanEdit" class="form-select" id="capkhenthuong_CanhanEdit" required>
+                                            <option value="Công an tỉnh">Công an tỉnh</option>
+                                            <option value="Bộ Công an">Bộ Công an</option>
+                                            <option value="Trung ương">Trung ương</option>
+                                            <option value="Tỉnh">Tỉnh</option>
+                                            <option value="Huyện">Huyện</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkhenthuong_CanhanEdit" class="form-label">Nội dung khen thưởng: </label>
+                                        <input type="text" name="noidungkhenthuong_CanhanEdit" class="form-control" id="noidungkhenthuong_CanhanEdit" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit khen thưởng cá nhân -->
+
+            <!-- Modal add ki luật cá nhân-->
+            <div class="modal fade" id="modalAddKiluatCanhan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm mới kỉ luật đối với cá nhân
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="kiluatCanhanForm" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="soQD_KiluatCanhan" class="form-label">Quyết định kỉ luật số: </label>
+                                        <input type="text" name="soQD_KiluatCanhan" class="form-control" id="soQD_KiluatCanhan" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ngayQD_KiluatCanhan" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD_KiluatCanhan" class="form-control" id="ngayQD_KiluatCanhan" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="hinhthuckiluat_KiluatCanhan" class="form-label">Hình thức kỉ luật: </label>
+                                        <select name="hinhthuckiluat_KiluatCanhan" class="form-select" id="hinhthuckiluat_KiluatCanhan" required>
+                                                <option value="Khiển trách">Khiển trách</option>
+                                                <option value="Cảnh cáo">Cảnh cáo</option>
+                                                <option value="Giáng bậc hàm">Giáng bậc hàm</option>
+                                                <option value="Cách chức">Cách chức</option>
+                                            </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkiluat_KiluatCanhan" class="form-label">Nội dung khen kỉ luật: </label>
+                                        <input type="text" name="noidungkiluat_KiluatCanhan" class="form-control" id="noidungkiluat_KiluatCanhan" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Thêm mới</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal add khen thưởng cá nhân -->
+            <!-- Modal edit khen thưởng cá nhân-->
+            <div class="modal fade" id="modalEditKiluatCanhan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa kỉ luật đối với cá nhân
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="EditKiluatCanhanForm" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="soQD_KiluatCanhanEdit" class="form-label">Quyết định kỉ luật số: </label>
+                                        <input type="text" name="soQD_KiluatCanhanEdit" class="form-control" id="soQD_KiluatCanhanEdit" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ngayQD_KiluatCanhanEdit" class="form-label">Ngày: </label>
+                                        <input type="date" max="<%=maxDate%>" name="ngayQD_KiluatCanhanEdit" class="form-control" id="ngayQD_KiluatCanhanEdit" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="hinhthuckiluat_KiluatCanhanEdit" class="form-label">Hình thứckỉ luật: </label>
+                                        <select name="hinhthuckiluat_KiluatCanhanEdit" class="form-select" id="hinhthuckiluat_KiluatCanhanEdit" required>
+                                            <option value="Khiển trách">Khiển trách</option>
+                                            <option value="Cảnh cáo">Cảnh cáo</option>
+                                            <option value="Giáng bậc hàm">Giáng bậc hàm</option>
+                                            <option value="Cách chức">Cách chức</option>
+                                            </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="noidungkiluat_KiluatCanhanEdit" class="form-label">Nội dung kỉ luật: </label>
+                                        <input type="text" name="noidungkiluat_KiluatCanhanEdit" class="form-control" id="noidungkiluat_KiluatCanhanEdit" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary add" type="submit"><i class="far fa-edit" style="margin-right: 3px;"></i>Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal edit khen thưởng cá nhân -->
+            <div class="col-xl-2" id="menu-chuyenmuc">
+                <ul class="menu-admin">
+                    <select id="chuyentrang" style="width: 100%; padding: 10px;
+                    margin-bottom: 2px;">
+                        <% list.forEach(function(i){%>
+                            <%if(i.id == phong._id){ %>
+                                <option selected value="<%=i._id%>"><%=i.kyhieu%></option>
+                          <%  }else{ %>
+                            <option value="<%=i._id%>"><%=i.kyhieu%></option>
+                       <% }})%>
+                    </select>
+                    <% if(allRole.indexOf('xem-danh-sach-phan-quyen') !== -1){ %>
+                        <li class="menu-admin-item">
+                            <a href="/quantrihethong/nhomquyen">
+                                <i class="fas fa-project-diagram menu-item-icon"></i>
+                                <h4 class="menu-item-title">Quản trị nhóm quyền</h4>
+                            </a>
+                        </li>
+                        <%  } %>
+                            <% if(allRole.indexOf('xem-danh-sach-nguoi-dung') !== -1){ %>
+                                <li class="menu-admin-item">
+                                    <a href="/quantrihethong/quantritaikhoan">
+                                        <i class="fas fa-user-shield menu-item-icon"></i>
+                                        <h4 class="menu-item-title">Quản trị tài khoản</h4>
+                                    </a>
+                                </li>
+                                <%  } %>
+                                    <% if(allRole.indexOf('xem-danh-sach-phong') !== -1){ %>
+                                        <li class="menu-admin-item">
+                                            <a href="/admin/quantriphong">
+                                                <i class="fab fa-microsoft menu-item-icon"></i>
+                                                <h4 class="menu-item-title">Quản trị tên phòng, huyện</h4>
+                                            </a>
+                                        </li>
+                                        <%  } %>
+                                            <% if(allRole.indexOf('xem-khen-thuong-phong') !== -1
+                            || allRole.indexOf('xem-thi-dua-phong') !== -1 || allRole.indexOf('xem-danh-sach-doi') !== -1
+                            || allRole.indexOf('xem-khen-thuong-doi') !== -1 || allRole.indexOf('xem-danh-sach-can-bo') !== -1
+                            || allRole.indexOf('xem-thi-dua-thang') !== -1 || allRole.indexOf('xem-thi-dua-nam') !== -1
+                            || allRole.indexOf('xem-xep-loai-dang-vien') !== -1 || allRole.indexOf('xem-ki-luat-ca-nhan') !== -1
+                            || allRole.indexOf('xem-khen-thuong-ca-nhan') !== -1
+                             ){ %>
+                                                <li class="menu-admin-item active">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalRedirect" data-bs-backdrop='static'>
+                                                        <i class="fas fa-house-user menu-item-icon"></i>
+                                                        <h4 class="menu-item-title">Quản trị chi tiết đơn vị</h4>
+                                                    </a>
+                                                </li>
+                                                <%  } %>
+                                                    <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                        <li class="menu-admin-item">
+                                                            <a href="/loaivanban">
+                                                                <i class="fas fa-scroll menu-item-icon"></i>
+                                                                <h4 class="menu-item-title">Quản trị loại văn bản</h4>
+                                                            </a>
+                                                        </li>
+                                                        <%   } %>
+                                                            <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                                <li class="menu-admin-item">
+                                                                    <a href="/quantrivanban">
+                                                                        <i class="fas fa-scroll menu-item-icon"></i>
+                                                                        <h4 class="menu-item-title">Quản trị văn bản</h4>
+                                                                    </a>
+                                                                </li>
+                                                                <%   } %>
+                                                                    <% if(allRole.indexOf('xem-danh-sach-van-ban') !== -1){%>
+                                                                        <li class="menu-admin-item">
+                                                                            <a href="/coquanbanhanh">
+                                                                                <i class="fas fa-scroll menu-item-icon"></i>
+                                                                                <h4 class="menu-item-title">Quản trị CQBH văn bản</h4>
+                                                                            </a>
+                                                                        </li>
+                                                                        <%   } %>
+                                                                            <% if(allRole.indexOf('xem-hoat-dong-tieu-bieu') !== -1){%>
+                                                                                <li class="menu-admin-item">
+                                                                                    <a href="/vannghethethao/quantri/hoatdongtieubieu">
+                                                                                        <i class="fas fa-running menu-item-icon"></i>
+                                                                                        <h4 class="menu-item-title">Hoạt động VN - TT tiêu biểu</h4>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <%   } %>
+                                                                                    <% if(allRole.indexOf('xem-mo-hinh') !== -1){%>
+                                                                                        <li class="menu-admin-item">
+                                                                                            <a href="/vannghethethao/quantri/mohinhtieubieu">
+                                                                                                <i class="fab fa-studiovinari menu-item-icon"></i>
+                                                                                                <h4 class="menu-item-title">Mô hình VHVN - TT nổi bật</h4>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <%   } %>
+                                                                                            <% if(allRole.indexOf('xem-ket-qua-the-thao') !== -1
+                                                                            || allRole.indexOf('xem-mon-the-thao') !== -1
+                                                                             || allRole.indexOf('xem-ca-nhan-the-thao-dien-hinh') !== -1
+                                                                            ){%>
+                                                                                                <li class="menu-admin-item">
+                                                                                                    <a href="/vannghethethao/quantri/thethao">
+                                                                                                        <i class="fas fa-biking menu-item-icon"></i>
+                                                                                                        <h4 class="menu-item-title">Quản trị thể thao</h4>
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                                <%   } %>
+                                                                                                    <% if(allRole.indexOf('xem-ket-qua-van-nghe') !== -1
+                                                                            || allRole.indexOf('xem-the-loai-van-nghe') !== -1
+                                                                             || allRole.indexOf('xem-ca-nhan-van-nghe-dien-hinh') !== -1
+                                                                            ){%>
+                                                                                                        <li class="menu-admin-item">
+                                                                                                            <a href="/vannghethethao/quantri/vannghe">
+                                                                                                                <i class="fas fa-music menu-item-icon"></i>
+                                                                                                                <h4 class="menu-item-title">Quản trị văn hóa văn nghệ</h4>
+                                                                                                            </a>
+                                                                                                        </li>
+                                                                                                        <%   } %>
+                                                                                                            <% if(allRole.indexOf('xem-chuyen-muc') !== -1){%>
+                                                                                                                <li class="menu-admin-item">
+                                                                                                                    <a href="/tuyentruyen/quantri/chuyenmuc">
+                                                                                                                        <i class="fab fa-apple menu-item-icon"></i>
+                                                                                                                        <h4 class="menu-item-title">Quản trị chuyên mục</h4>
+                                                                                                                    </a>
+                                                                                                                </li>
+                                                                                                                <%   } %>
+                                                                                                                    <% if(allRole.indexOf('xem-muc-tin') !== -1){%>
+                                                                                                                        <li class="menu-admin-item">
+                                                                                                                            <a href="/tuyentruyen/quantri/muctin">
+                                                                                                                                <i class="fab fa-edge menu-item-icon"></i>
+                                                                                                                                <h4 class="menu-item-title">Quản trị mục tin</h4>
+                                                                                                                            </a>
+                                                                                                                        </li>
+                                                                                                                        <%   } %>
+                                                                                                                            <% if(allRole.indexOf('xem-tin-bai') !== -1){%>
+                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                    <a href="/tuyentruyen/quantri/tinbai">
+                                                                                                                                        <i class="fas fa-fan menu-item-icon"></i>
+                                                                                                                                        <h4 class="menu-item-title">Quản trị tin bài</h4>
+                                                                                                                                    </a>
+                                                                                                                                </li>
+                                                                                                                                <%   } %>
+                                                                                                                                    <% if(allRole.indexOf('xem-cuoc-thi-tuyen-truyen') !== -1){%>
+                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                            <a href="/tuyentruyen/quantri/ketquathi">
+                                                                                                                                                <i class="fab fa-modx menu-item-icon"></i>
+                                                                                                                                                <h4 class="menu-item-title">Quản trị thi tuyên truyền</h4>
+                                                                                                                                            </a>
+                                                                                                                                        </li>
+                                                                                                                                        <%   } %>
+                                                                                                                                            <% if(allRole.indexOf('xem-ket-qua-kiem-tra-px03') !== -1){%>
+                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                    <a href="/congtacdieulenh/quantri">
+                                                                                                                                                        <i class="fab fa-shirtsinbulk menu-item-icon"></i>
+                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra điều lệnh CA tỉnh</h4>
+                                                                                                                                                    </a>
+                                                                                                                                                </li>
+                                                                                                                                                <%   } %>
+                                                                                                                                                    <% if(allRole.indexOf('xem-tinh-huong-gia-dinh') !== -1){%>
+                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                            <a href="/congtacdieulenh/quantri/tinhhuong">
+                                                                                                                                                                <i class="fas fa-skull-crossbones menu-item-icon"></i>
+                                                                                                                                                                <h4 class="menu-item-title">Quản trị tình huống giả định</h4>
+                                                                                                                                                            </a>
+                                                                                                                                                        </li>
+                                                                                                                                                        <%   } %>
+                                                                                                                                                            <% if(allRole.indexOf('xem-kiem-tra-tinh-huong-gia-dinh') !== -1){%>
+                                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                                    <a href="/congtacdieulenh/quantri/kiemtra/tinhhuong">
+                                                                                                                                                                        <i class="fas fa-user-secret menu-item-icon"></i>
+                                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra tình huống giả định</h4>
+                                                                                                                                                                    </a>
+                                                                                                                                                                </li>
+                                                                                                                                                                <%   } %>
+                                                                                                                                                                    <% if(allRole.indexOf('xem-kiem-tra-quan-su-vo-thuat') !== -1){%>
+                                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                                            <a href="/congtacdieulenh/quantri/kiemtra/dieulenhquansu">
+                                                                                                                                                                                <i class="fas fa-fan menu-item-icon"></i>
+                                                                                                                                                                                <h4 class="menu-item-title">Kiểm tra điều lệnh, võ thuật</h4>
+                                                                                                                                                                            </a>
+                                                                                                                                                                        </li>
+                                                                                                                                                                        <%   } %>
+                                                                                                                                                                            <% if(allRole.indexOf('xem-kiem-tra-the-luc') !== -1){%>
+                                                                                                                                                                                <li class="menu-admin-item">
+                                                                                                                                                                                    <a href="/congtacdieulenh/quantri/kiemtra/theluc">
+                                                                                                                                                                                        <i class="fas fa-swimmer menu-item-icon"></i>
+                                                                                                                                                                                        <h4 class="menu-item-title">Kiểm tra thể lực</h4>
+                                                                                                                                                                                    </a>
+                                                                                                                                                                                </li>
+                                                                                                                                                                                <%   } %>
+                                                                                                                                                                                    <% if(allRole.indexOf('xem-kiem-tra-ban-sung') !== -1){%>
+                                                                                                                                                                                        <li class="menu-admin-item">
+                                                                                                                                                                                            <a href="/congtacdieulenh/quantri/kiemtra/bansung">
+                                                                                                                                                                                                <i class="fas fa-map-signs menu-item-icon"></i>
+                                                                                                                                                                                                <h4 class="menu-item-title">Kiểm tra bắn đạn thật</h4>
+                                                                                                                                                                                            </a>
+                                                                                                                                                                                        </li>
+                                                                                                                                                                                        <%   } %>
+                </ul>
+            </div>
+
+            <div class="col-xl-10" id="chuyenmuc">
+                <div id="tieudetrang" class="animate__animated animate__fadeInUp">
+                    <h3 class="tieudetrang">Quản trị chi tiết
+                        <%=phong.ten%>
+                    </h3>
+                </div>
+                <div class="col-xl-12 animate__animated animate__fadeIn" id="main">
+                    <h4 class="main-title" id="quantri-tapthe">Danh mục quản trị đối với tập thể:</h4>
+                    <ul id="quantri-list">
+                        <% if(allRole.indexOf('xem-khen-thuong-phong') !== -1){%>
+                            <li class="quantri-item">
+                                <a id="khenthuongPhong" href="#">
+                                    Khen thưởng tập thể phòng
+                                </a>
+                            </li>
+                            <%   } %>
+                                <% if(allRole.indexOf('xem-thi-dua-phong') !== -1){%>
+                                    <li class="quantri-item">
+                                        <a id="thiduaPhong" href="#">
+                                        Phong trào "Vì an ninh Tổ quốc"
+                                        </a>
+                                    </li>
+                                    <%   } %>
+                                        <% if(allRole.indexOf('xem-danh-sach-doi') !== -1){%>
+                                            <li class="quantri-item">
+                                                <a id="quantriDoi" href="#">
+                                                Đội nghiệp vụ, công an xã
+                                                </a>
+                                            </li>
+                                            <%   } %>
+                                                <% if(allRole.indexOf('xem-khen-thuong-doi') !== -1){%>
+                                                    <li class="quantri-item">
+                                                        <a id="khenthuongDoi" href="#">
+                                                            Khen thưởng cấp đội, công an xã
+                                                        </a>
+                                                    </li>
+                                                    <%   } %>
+                    </ul>
+                    <div id="quantri-detail"></div>
+                </div>
+
+                <!-- Quản trị cán bộ, chiến sĩ, thi đua năm  -->
+                <div class="col-xl-12 animate__animated animate__fadeIn" id="main">
+                    <h4 class="main-title" id="quantri-canhan">Danh mục quản trị đối với cá nhân:</h4>
+                    <ul id="quantri-list">
+                        <% if(allRole.indexOf('xem-danh-sach-can-bo') !== -1){%>
+                            <li class="quantri-item">
+                                <a id="quantriCanbo" href="#"> Quản trị cán bộ, chiến sĩ</a>
+                            </li>
+                            <%   } %>
+                                <% if(allRole.indexOf('xem-thi-dua-thang') !== -1){%>
+                                    <li class="quantri-item">
+                                        <a id="quantriThiduathang" href="#">Quản trị thi đua tháng</a>
+                                    </li>
+                                    <%   } %>
+                                        <% if(allRole.indexOf('xem-thi-dua-nam') !== -1){%>
+                                            <li class="quantri-item">
+                                                <a id="quantriThiduanam" href="#">Quản trị thi đua năm</a>
+                                            </li>
+                                            <%   } %>
+                                                <% if(allRole.indexOf('xem-xep-loai-dang-vien') !== -1){%>
+                                                    <li class="quantri-item">
+                                                        <a id="quantriDangvien" href="#">Quản trị đảng viên</a>
+                                                    </li>
+                                                    <%   } %>
+                                                        <% if(allRole.indexOf('xem-khen-thuong-ca-nhan') !== -1){%>
+                                                            <li class="quantri-item">
+                                                                <a id="quantriKhenthuongCanhan" href="#">Quản trị khen thưởng</a>
+                                                            </li>
+                                                            <%   } %>
+                                                                <% if(allRole.indexOf('xem-ki-luat-ca-nhan') !== -1){%>
+                                                                    <li class="quantri-item">
+                                                                        <a id="quantriKiluatCanhan" href="#">Quản trị kỉ luật</a>
+                                                                    </li>
+                                                                    <%   } %>
+                    </ul>
+                    <div id="quantri-detail-canhan"></div>
+                </div>
+                <!-- End quản trị cán bộ, chiến sĩ, thi đua năm  -->
+            </div>
+
+            <!-- Toast  Thêm VB thành công-->
+            <div class="position-fixed top-0 end-0" style="z-index: 1111">
+                <div id="add-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <!-- <img src="" class="rounded me-2" alt="..."> -->
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Thêm mới thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <!-- Toast  Edit VB thành công-->
+            <div class="position-fixed top-0 end-0" style="z-index: 1111">
+                <div id="edit-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <!-- <img src="" class="rounded me-2" alt="..."> -->
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Cập nhật thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <!-- Toast  Edit VB thành công-->
+            <div class="position-fixed top-0 end-0" style="z-index: 1111">
+                <div id="delete-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <!-- <img src="" class="rounded me-2" alt="..."> -->
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Xóa thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+
+            <!-- Toast  move công tác thành công-->
+            <div class="position-fixed top-0 end-0" style="z-index: 1111">
+                <div id="move-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <!-- <img src="" class="rounded me-2" alt="..."> -->
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Vừa xong</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Chuyển công tác thành công.
+                    </div>
+                </div>
+            </div>
+            <!-- End Toast  -->
+            <span id='variableJSON' hidden>
+                <%= JSON.stringify(allRole); %>
+            </span>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/admin/chitietphong.js"></script>
+    <script src="/javascripts/logout.js"></script>
+    <script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+
+</body>
+
+
+</html>
